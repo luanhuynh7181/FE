@@ -147,9 +147,9 @@ const SubMenuWrapper = styled(Box)(
                 background: ${theme.colors.alpha.trueWhite[100]};
                 opacity: 0;
                 transition: ${theme.transitions.create([
-                  'transform',
-                  'opacity'
-                ])};
+    'transform',
+    'opacity'
+  ])};
                 width: 6px;
                 height: 6px;
                 transform: scale(0);
@@ -188,16 +188,16 @@ function SidebarMenu() {
                   disableRipple
                   component={RouterLink}
                   onClick={closeSidebar}
-                  to="/overview"
+                  to="/dashboards"
                   startIcon={<DesignServicesTwoToneIcon />}
                 >
-                  Overview
+                  Dashboards
                 </Button>
               </ListItem>
             </List>
           </SubMenuWrapper>
         </List>
-        <List
+        {/* <List
           component="div"
           subheader={
             <ListSubheader component="div" disableSticky>
@@ -231,8 +231,8 @@ function SidebarMenu() {
               </ListItem>
             </List>
           </SubMenuWrapper>
-        </List>
-        <List
+        </List> */}
+        {/* <List
           component="div"
           subheader={
             <ListSubheader component="div" disableSticky>
@@ -255,7 +255,7 @@ function SidebarMenu() {
               </ListItem>
             </List>
           </SubMenuWrapper>
-        </List>
+        </List> */}
         <List
           component="div"
           subheader={
@@ -291,7 +291,7 @@ function SidebarMenu() {
             </List>
           </SubMenuWrapper>
         </List>
-        <List
+        {/* <List
           component="div"
           subheader={
             <ListSubheader component="div" disableSticky>
@@ -299,7 +299,7 @@ function SidebarMenu() {
             </ListSubheader>
           }
         >
-          {/* <SubMenuWrapper>
+          <SubMenuWrapper>
             <List component="div">
               <ListItem component="div">
                 <Button
@@ -401,9 +401,9 @@ function SidebarMenu() {
                 </Button>
               </ListItem>
             </List>
-          </SubMenuWrapper> */}
-        </List>
-        <List
+          </SubMenuWrapper>
+        </List> */}
+        {/* <List
           component="div"
           subheader={
             <ListSubheader component="div" disableSticky>
@@ -459,7 +459,7 @@ function SidebarMenu() {
               </ListItem>
             </List>
           </SubMenuWrapper>
-        </List>
+        </List> */}
       </MenuWrapper>
     </>
   );

@@ -9,7 +9,7 @@ import Wallets from './Wallets';
 import AccountSecurity from './AccountSecurity';
 import WatchList from './WatchList';
 
-function DashboardCrypto() {
+function Dashboard() {
   return (
     <>
       <Helmet>
@@ -18,7 +18,7 @@ function DashboardCrypto() {
       <PageTitleWrapper>
         <PageHeader />
       </PageTitleWrapper>
-      <Container maxWidth="lg">
+      {/* <Container maxWidth="lg">
         <Grid
           container
           direction="row"
@@ -39,10 +39,10 @@ function DashboardCrypto() {
             <WatchList />
           </Grid>
         </Grid>
-      </Container>
+      </Container> */}
       <Footer />
     </>
   );
 }
 
-export default DashboardCrypto;
+export default Dashboard;

@@ -99,7 +99,7 @@ function Logo() {
 
   return (
     <TooltipWrapper
-      title="Tokyo Free White React Typescript Admin Dashboard"
+      title="tool db"
       arrow
     >
       <LogoWrapper to="/overview">
@@ -116,7 +116,7 @@ function Logo() {
           badgeContent="2.0"
         >
           <LogoSignWrapper>
-              <LogoSignInner />
+            <LogoSignInner />
           </LogoSignWrapper>
         </Badge>
       </LogoWrapper>
