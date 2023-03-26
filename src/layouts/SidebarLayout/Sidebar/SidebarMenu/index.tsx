@@ -191,7 +191,7 @@ function SidebarMenu() {
                   to="/dashboards"
                   startIcon={<DesignServicesTwoToneIcon />}
                 >
-                  Dashboards
+                  Dashboard
                 </Button>
               </ListItem>
             </List>

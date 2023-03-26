@@ -12,7 +12,7 @@ import Addresses from './Addresses';
 
 function ManagementUserProfile() {
   const user = {
-    savedCards: 7,
+    savedCards: 1,
     name: 'Catherine Pike',
     coverImg: '/static/images/placeholders/covers/5.jpg',
     avatar: '/static/images/avatars/4.jpg',
@@ -26,7 +26,6 @@ function ManagementUserProfile() {
   return (
     <>
       <Helmet>
-        <title>User Details - Management</title>
       </Helmet>
       <Container sx={{ mt: 3 }} maxWidth="lg">
         <Grid

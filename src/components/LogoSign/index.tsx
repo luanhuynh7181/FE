@@ -5,7 +5,8 @@ import {
   TooltipProps,
   tooltipClasses,
   styled,
-  useTheme
+  useTheme,
+  Typography
 } from '@mui/material';
 import { Link } from 'react-router-dom';
 
@@ -99,9 +100,10 @@ function Logo() {
 
   return (
     <TooltipWrapper
-      title="tool db"
+      title="Tokyo Free White React Typescript Admin Dashboard"
       arrow
     >
+
       <LogoWrapper to="/overview">
         <Badge
           sx={{
@@ -116,10 +118,20 @@ function Logo() {
           badgeContent="2.0"
         >
           <LogoSignWrapper>
-            <LogoSignInner />
+            <LogoSign>
+              <LogoSignInner />
+
+            </LogoSign>
+
           </LogoSignWrapper>
+          <div style={{ width: "30px" }}></div>
+          <Typography variant="h1" component="h2" style={{ color: "white" }}>
+            DB Tool
+          </Typography>
         </Badge>
+
       </LogoWrapper>
+
     </TooltipWrapper>
   );
 }

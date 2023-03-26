@@ -7,7 +7,8 @@ import {
   Avatar,
   CardMedia,
   Button,
-  IconButton
+  IconButton,
+  TextField
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
@@ -87,14 +88,7 @@ const ProfileCover = ({ user }) => {
             <ArrowBackTwoToneIcon />
           </IconButton>
         </Tooltip>
-        <Box>
-          <Typography variant="h3" component="h3" gutterBottom>
-            Profile for {user.name}
-          </Typography>
-          <Typography variant="subtitle2">
-            This is a profile page. Easy to modify, always blazing fast
-          </Typography>
-        </Box>
+        <TextField id="outlined-password-input"label="uid" type="number" autoComplete="current-password"/>
       </Box>
       <CardCover>
         <CardMedia image={user.coverImg} />
