@@ -13,7 +13,7 @@ import Addresses from './Addresses';
 function ManagementUserProfile() {
   const user = {
     savedCards: 1,
-    name: 'Catherine Pike',
+    name: 'Catherine Pik22e',
     coverImg: '/static/images/placeholders/covers/5.jpg',
     avatar: '/static/images/avatars/4.jpg',
     description:
@@ -35,27 +35,15 @@ function ManagementUserProfile() {
           alignItems="stretch"
           spacing={3}
         >
-          <Grid item xs={12} md={8}>
+          <Grid item xs={12} md={5}>
             <ProfileCover user={user} />
           </Grid>
-          <Grid item xs={12} md={4}>
+          <Grid item xs={12} md={7}>
             <RecentActivity />
           </Grid>
-          <Grid item xs={12} md={8}>
-            <Feed />
-          </Grid>
-          <Grid item xs={12} md={4}>
-            <PopularTags />
-          </Grid>
-          <Grid item xs={12} md={7}>
-            <MyCards />
-          </Grid>
-          <Grid item xs={12} md={5}>
-            <Addresses />
-          </Grid>
+         
         </Grid>
       </Container>
-      <Footer />
     </>
   );
 }
