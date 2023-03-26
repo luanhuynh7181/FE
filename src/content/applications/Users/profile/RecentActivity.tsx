@@ -19,7 +19,7 @@ import TreeItem from '@mui/lab/TreeItem';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { useState } from 'react';
-
+import ModelTree from './ModelTree';
 const AvatarPrimary = styled(Avatar)(
   ({ theme }) => `
       background: ${theme.colors.primary.lighter};
@@ -31,7 +31,7 @@ const AvatarPrimary = styled(Avatar)(
 let userModel = {
   userId: 111,
   gold: 3434,
-  name: "luanhv"
+
 }
 function RecentActivity() {
   const theme = useTheme();
@@ -52,19 +52,6 @@ function RecentActivity() {
 
   };
 
-  const createTreeExtend = (key: string, obj: Object) => (
-    <TreeItem nodeId="1" label={key}>
-      {
-        Object.keys(obj).map((k, v) =>
-        (
-          <TreeItem nodeId="1" key={k} label={k + ":" + v.toString()} />
-        )
-
-        )
-      }
-    </TreeItem>
-
-  )
   return (
     <Card>
       <Box sx={{ width: 1 }} display="flex" alignItems="flex-start" />
@@ -90,11 +77,7 @@ function RecentActivity() {
           onNodeSelect={handleSelect}
           multiSelect
         >
-          <TreeItem nodeId="1" label="Applications">
-            <TreeItem nodeId="2" label="Calendar" />
-            <TreeItem nodeId="3" label="Chrome" />
-            <TreeItem nodeId="4" label="Webstorm" />
-          </TreeItem>
+          <ModelTree model={userModel} modelName={"userModel"} />
           <TreeItem nodeId="5" label="Documents">
             <TreeItem nodeId="6" label="MUI">
               <TreeItem nodeId="7" label="src">
