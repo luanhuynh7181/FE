@@ -40,7 +40,10 @@ function RecentActivity() {
 
 
   return (
-    <Card>
+    <Card style={{ backgroundColor: "white" }}>
+      <Typography pt={1} pl={1} variant="h3" component="h3" gutterBottom>
+        Player Model
+      </Typography>
       <Box sx={{ width: 1 }} display="flex" alignItems="flex-start" />
       <TextField sx={{ width: 1 }}
         id="outlined-search"

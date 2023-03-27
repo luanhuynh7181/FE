@@ -85,31 +85,36 @@ const ProfileCover = ({ user }) => {
   const [uid, setUid] = useState<string>("-1")
   return (
     <>
-      <Box display="flex" mb={5}>
+      <Card style={{ backgroundColor: "white", padding: "10px" }} >
         <Stack direction="column" spacing={5}>
-          <Stack direction="row" spacing={5}>
-            <Avatar style={{    borderRadius: 75}}sx={{ width: 150, height: 150 }} variant="rounded" alt={user.name} src={user.avatar} />
-            <TextField id="outlined-password-input" label="uid" type="number" autoComplete="current-password" onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-              setUid(event.target.value);
-            }} onKeyPress={(ev) => {
-              if (ev.key === 'Enter') {
-                console.log(uid);
-              }
-            }} />
-          </Stack>
+
+          <TextField sx={{ width: 1 }} id="outlined-password-input" label="uid" type="number" autoComplete="current-password" onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+            setUid(event.target.value);
+          }} onKeyPress={(ev) => {
+            if (ev.key === 'Enter') {
+              console.log("search_ui_id" + uid);
+            }
+          }} />
+          <Avatar style={{ borderRadius: 75 }} sx={{ width: 150, height: 150 }} variant="rounded" alt={user.name} src={user.avatar} />
+          <Typography variant="h3" component="h3" gutterBottom>
+            Gold:1000
+          </Typography>
+          <Typography variant="h3" component="h3" gutterBottom>
+            Di:1000
+          </Typography>
+
           <Button style={{
-        
+
             backgroundColor: "red",
             padding: "18px 3px",
             fontSize: "18px"
           }}
             variant="contained" >Kich user</Button>
-
         </Stack>
 
-      </Box>
 
 
+      </Card>
     </>
   );
 };

@@ -25,8 +25,6 @@ function ManagementUserProfile() {
 
   return (
     <>
-      <Helmet>
-      </Helmet>
       <Container sx={{ mt: 3 }} maxWidth="lg">
         <Grid
           container
@@ -35,13 +33,13 @@ function ManagementUserProfile() {
           alignItems="stretch"
           spacing={3}
         >
-          <Grid item xs={12} md={5}>
+          <Grid item xs={5}>
             <ProfileCover user={user} />
           </Grid>
-          <Grid item xs={12} md={7}>
+          <Grid item xs={7}>
             <RecentActivity />
           </Grid>
-         
+
         </Grid>
       </Container>
     </>

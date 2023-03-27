@@ -82,7 +82,10 @@ const ModelTree: FC<ModelTreeProps> = ({ model, modelName }) => {
         // let idExpend = getNewId();
         // addToExpand(idExpend);
         return (
-            <TreeItem nodeId={key + ""} key={key + ""} label={key.toString() + ":"} >
+            <TreeItem nodeId={key + ""} key={key + ""} label={key.toString() + ":"} sx={{
+                fontSize: '2.4rem',
+                fontFamily: 'Raleway',
+            }} >
 
                 {
                     Object.keys(obj).map((k, v) => {

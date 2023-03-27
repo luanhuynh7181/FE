@@ -40,7 +40,6 @@ function Dashboard() {
           </Grid>
         </Grid>
       </Container> */}
-      <Footer />
     </>
   );
 }
