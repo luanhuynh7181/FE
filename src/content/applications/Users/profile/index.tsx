@@ -9,8 +9,15 @@ import Feed from './Feed';
 import PopularTags from './PopularTags';
 import MyCards from './MyCards';
 import Addresses from './Addresses';
+import { makeStyles } from '@mui/styles';
 
 function ManagementUserProfile() {
+  const useStyles = makeStyles(theme => ({
+    color: {
+      backgroundColor: 'black'
+    }
+  }))
+
   const user = {
     savedCards: 1,
     name: 'Catherine Pik22e',
@@ -23,9 +30,11 @@ function ManagementUserProfile() {
     followers: '465'
   };
 
+
   return (
     <>
       <Grid
+        style={{ backgroundColor: '#f2f2f2' }}
         container
         direction="row"
         justifyContent="center"

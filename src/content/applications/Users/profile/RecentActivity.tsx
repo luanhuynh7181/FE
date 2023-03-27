@@ -8,11 +8,12 @@ import {
   useTheme,
   styled,
   TextField,
-  Button
+  Button,
+  IconButton
 } from '@mui/material';
+import HeaderSearch from 'src/layouts/SidebarLayout/Header/Buttons/Search';
 
-
-
+import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
 import ModelTree from './ModelTree';
 
 let userModel = {
@@ -38,11 +39,12 @@ function RecentActivity() {
         Player Model
       </Typography>
       <Box sx={{ width: 1 }} display="flex" alignItems="flex-start" />
-      <TextField sx={{ width: 1, mr: 3 }}
+      <TextField sx={{ width: 1, mr: 3, mt: 1 }}
         id="outlined-search"
         label="Search model"
         type="search"
       />
+      <HeaderSearch />
       <Divider />
       <Box sx={{ height: 600, width: 1, overflowY: 'auto' }}>
 

@@ -108,7 +108,7 @@ const ModelTree: FC<ModelTreeProps> = ({ model, modelName }) => {
 
     return (
         <>
-            <Box sx={{ mb: 1 }}>
+            <Box sx={{ mb: 0 }}>
                 <Button onClick={handleExpandClick}>
                     {'Collapse all'}
                 </Button>

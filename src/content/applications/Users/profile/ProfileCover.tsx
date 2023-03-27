@@ -88,7 +88,7 @@ const ProfileCover = ({ user }) => {
     <>
       <Card style={{ backgroundColor: "white", padding: "10px", paddingTop: "13px", }} >
 
-        <Stack direction="column" spacing={4}>
+        <Stack direction="column" spacing={3}>
 
           <TextField sx={{ width: 1 }} id="outlined-password-input" label="uid" type="number" autoComplete="current-password" onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
             setUid(event.target.value);
@@ -112,24 +112,30 @@ const ProfileCover = ({ user }) => {
           <Divider />
           <Stack direction="row" spacing={2}>
             <img object-fit="contain" width="30px" height="32px" src="/static/images/icon/gold.png" />
-            <Typography variant="h3" component="h6" >Gold :{"100,0000,000B"}</Typography>
+            <Typography variant="h3" component="h6" > {"100,0000,000B"}</Typography>
           </Stack  >
           <Stack direction="row" spacing={2}>
             <img object-fit="contain" width="35px" height="33px" src="/static/images/icon/diamond.png" />
-            <Typography variant="h3" component="h6" >Diamond :{"10"}</Typography>
+            <Typography variant="h3" component="h6" > {"10"}</Typography>
           </Stack  >
 
           <Stack direction="row" spacing={2}>
             <img object-fit="contain" width="35px" height="32px" src="/static/images/icon/vpoint.png" />
-            <Typography variant="h3" component="h6" >Vpoint :{"10"}</Typography>
+            <Typography variant="h3" component="h6" > {"10"}</Typography>
           </Stack  >
+          <Stack spacing={1.5}>
+            <Typography variant="h4" component="h6" >level &nbsp; &nbsp; &nbsp;: &nbsp;{"10"}</Typography>
+            <Typography variant="h4" component="h6" >vipLevel: &nbsp;{"10"}</Typography>
+
+            <Typography variant="h4" component="h6" >nPay&nbsp; &nbsp; &nbsp;: &nbsp;{"-1"}</Typography>
+          </Stack>
           <Button style={{
 
             backgroundColor: "red",
             padding: "5px 2px",
             fontSize: "25px"
           }}
-            variant="contained" >Kich user</Button>
+            variant="contained" >Kick user</Button>
         </Stack>
 
 

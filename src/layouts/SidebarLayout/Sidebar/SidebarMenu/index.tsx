@@ -59,13 +59,13 @@ const SubMenuWrapper = styled(Box)(
 
       .MuiListItem-root {
         padding: 1px 0;
-
+     
         .MuiBadge-root {
           position: absolute;
           right: ${theme.spacing(3.2)};
 
           .MuiBadge-standard {
-            background: ${theme.colors.primary.main};
+            background: '${theme.colors.primary.main}';
             font-size: ${theme.typography.pxToRem(10)};
             font-weight: bold;
             text-transform: uppercase;
