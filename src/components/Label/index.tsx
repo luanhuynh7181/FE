@@ -5,13 +5,14 @@ import { styled } from '@mui/material/styles';
 interface LabelProps {
   className?: string;
   color?:
-    | 'primary'
-    | 'black'
-    | 'secondary'
-    | 'error'
-    | 'warning'
-    | 'success'
-    | 'info';
+  | 'primary'
+  | 'black'
+  | 'secondary'
+  | 'error'
+  | 'warning'
+  | 'success'
+  | 'info'
+  | 'custom1';
   children?: ReactNode;
 }
 
@@ -58,8 +59,14 @@ const LabelWrapper = styled('span')(
         }
         
         &-info {
-          background-color: ${theme.colors.info.lighter};
+          background-color: "${theme.colors.info.lighter}";
           color: ${theme.palette.info.main}
+        }
+
+        &-custom1 {
+          background-color: "#b58da0";
+          color: "#b58da0;
+          font-size: ${theme.typography.pxToRem(14)};
         }
       }
 `
@@ -88,7 +95,8 @@ Label.propTypes = {
     'error',
     'warning',
     'success',
-    'info'
+    'info',
+    'custom1'
   ])
 };
 

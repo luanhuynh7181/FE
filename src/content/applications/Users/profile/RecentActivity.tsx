@@ -14,14 +14,7 @@ import {
 
 
 import ModelTree from './ModelTree';
-const AvatarPrimary = styled(Avatar)(
-  ({ theme }) => `
-      background: ${theme.colors.primary.lighter};
-      color: ${theme.colors.primary.main};
-      width: ${theme.spacing(7)};
-      height: ${theme.spacing(7)};
-`
-);
+
 let userModel = {
   userId: 111,
   name: "luanhuynh",
@@ -40,12 +33,12 @@ function RecentActivity() {
 
 
   return (
-    <Card style={{ backgroundColor: "white" }}>
+    <Card style={{ backgroundColor: "white", padding: "10px", paddingTop: "13px", }} >
       <Typography pt={1} pl={1} variant="h3" component="h3" gutterBottom>
         Player Model
       </Typography>
       <Box sx={{ width: 1 }} display="flex" alignItems="flex-start" />
-      <TextField sx={{ width: 1 }}
+      <TextField sx={{ width: 1, mr: 3 }}
         id="outlined-search"
         label="Search model"
         type="search"

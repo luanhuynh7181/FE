@@ -12,9 +12,7 @@ import WatchList from './WatchList';
 function Dashboard() {
   return (
     <>
-      <Helmet>
-        <title>Crypto Dashboard</title>
-      </Helmet>
+
       <PageTitleWrapper>
         <PageHeader />
       </PageTitleWrapper>
