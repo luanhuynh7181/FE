@@ -15,14 +15,15 @@ import {
   Popover,
   Typography
 } from '@mui/material';
-
+import { useNavigate, Navigate, useLocation } from 'react-router-dom';
 import InboxTwoToneIcon from '@mui/icons-material/InboxTwoTone';
 import { styled } from '@mui/material/styles';
 import ExpandMoreTwoToneIcon from '@mui/icons-material/ExpandMoreTwoTone';
 import AccountBoxTwoToneIcon from '@mui/icons-material/AccountBoxTwoTone';
 import LockOpenTwoToneIcon from '@mui/icons-material/LockOpenTwoTone';
 import AccountTreeTwoToneIcon from '@mui/icons-material/AccountTreeTwoTone';
-
+import { setUser, UserData, initialState } from 'src/data/UserDataSplice';
+import { useSelector, useDispatch } from 'react-redux';
 const UserBoxButton = styled(Button)(
   ({ theme }) => `
         padding-left: ${theme.spacing(1)};
@@ -75,6 +76,13 @@ function HeaderUserbox() {
   const handleClose = (): void => {
     setOpen(false);
   };
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const signOut = (): void => {
+    dispatch(setUser(initialState))
+    localStorage.removeItem("user_data");
+    navigate("/");
+  }
 
   return (
     <>
@@ -135,7 +143,7 @@ function HeaderUserbox() {
         </List>
         <Divider />
         <Box sx={{ m: 1 }}>
-          <Button color="primary" fullWidth>
+          <Button color="primary" fullWidth onClick={signOut}>
             <LockOpenTwoToneIcon sx={{ mr: 1 }} />
             Sign out
           </Button>

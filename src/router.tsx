@@ -6,7 +6,7 @@ import SidebarLayout from 'src/layouts/SidebarLayout';
 import BaseLayout from 'src/layouts/BaseLayout';
 
 import SuspenseLoader from 'src/components/SuspenseLoader';
-
+import PrivateRoute from './components/PrivateRoute';
 const Loader = (Component: any) => (props: any) =>
 (
   <Suspense fallback={<SuspenseLoader />}>
@@ -124,7 +124,7 @@ const routes: RouteObject[] = [
   },
   {
     path: 'dashboards',
-    element: <SidebarLayout />,
+    element: <PrivateRoute><SidebarLayout /> </PrivateRoute>,
     children: [
       {
         path: '',
@@ -142,7 +142,7 @@ const routes: RouteObject[] = [
   },
   {
     path: 'management',
-    element: <SidebarLayout />,
+    element: <PrivateRoute><SidebarLayout /> </PrivateRoute>,
     children: [
       {
         path: '',

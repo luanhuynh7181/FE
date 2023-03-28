@@ -6,13 +6,16 @@ import LocalizationProvider from '@mui/lab/LocalizationProvider';
 
 import { CssBaseline } from '@mui/material';
 import ThemeProvider from './theme/ThemeProvider';
-
+import { store } from './app/store';
+import { Provider } from 'react-redux';
 function App() {
   const content = useRoutes(router);
 
   return (
     <ThemeProvider>
-      {content}
+      <Provider store={store}>
+        {content}
+      </Provider>
     </ThemeProvider>
   );
 }
