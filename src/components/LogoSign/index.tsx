@@ -104,7 +104,8 @@ function Logo() {
       arrow
     >
 
-      <LogoWrapper to="/overview">
+      <LogoWrapper to="/overview"
+      >
         <Badge
           sx={{
             '.MuiBadge-badge': {

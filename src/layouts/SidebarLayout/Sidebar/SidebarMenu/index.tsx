@@ -31,7 +31,7 @@ import ChromeReaderModeTwoToneIcon from '@mui/icons-material/ChromeReaderModeTwo
 import WorkspacePremiumTwoToneIcon from '@mui/icons-material/WorkspacePremiumTwoTone';
 import CameraFrontTwoToneIcon from '@mui/icons-material/CameraFrontTwoTone';
 import DisplaySettingsTwoToneIcon from '@mui/icons-material/DisplaySettingsTwoTone';
-
+import { PATH_ROUTE } from 'src/route/routeConst';
 const MenuWrapper = styled(Box)(
   ({ theme }) => `
   .MuiList-root {
@@ -188,7 +188,7 @@ function SidebarMenu() {
                   disableRipple
                   component={RouterLink}
                   onClick={closeSidebar}
-                  to="/dashboards"
+                  to={PATH_ROUTE.ADMIN.PATH}
                   startIcon={<DesignServicesTwoToneIcon />}
                 >
                   Dashboard
@@ -271,7 +271,7 @@ function SidebarMenu() {
                   disableRipple
                   component={RouterLink}
                   onClick={closeSidebar}
-                  to="/management/profile/details"
+                  to={PATH_ROUTE.ADMIN.PATH + "/" + PATH_ROUTE.ADMIN.USER_PROFILE}
                   startIcon={<AccountCircleTwoToneIcon />}
                 >
                   User Profile

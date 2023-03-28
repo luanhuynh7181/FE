@@ -4,6 +4,7 @@ import { setUser, selectUserData, UserData } from 'src/data/UserDataSplice';
 import { Navigate } from 'react-router';
 const PrivateRoute = ({ redirectPath = '/', children }) => {
     const userData: UserData = useSelector(selectUserData);
+    console.log("privateroute", JSON.stringify(userData))
     if (userData.ticket == "") {
         return <Navigate to={redirectPath} replace />;
     }

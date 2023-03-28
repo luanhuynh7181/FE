@@ -7,6 +7,7 @@ import BaseLayout from 'src/layouts/BaseLayout';
 
 import SuspenseLoader from 'src/components/SuspenseLoader';
 import PrivateRoute from '../components/PrivateRoute';
+import { PATH_ROUTE } from './routeConst';
 const Loader = (Component: any) => (props: any) =>
 (
   <Suspense fallback={<SuspenseLoader />}>
@@ -16,7 +17,7 @@ const Loader = (Component: any) => (props: any) =>
 
 // Pages
 
-const Overview = Loader(lazy(() => import('src/content/overview')));
+const SignIn = Loader(lazy(() => import('src/content/SignIn')));
 
 // Dashboards
 
@@ -78,8 +79,28 @@ const StatusMaintenance = Loader(
 
 const routes: RouteObject[] = [
   {
-    path: '/',
-    element: <Overview />
+    path: PATH_ROUTE.SIGN_IN.PATH,
+    element: <SignIn />
+  },
+  {
+    path: PATH_ROUTE.ADMIN.PATH,
+    element: <PrivateRoute><SidebarLayout /> </PrivateRoute>,
+    children: [
+
+      {
+        path: '',
+        element: <DashBoard />
+      },
+      {
+        path: PATH_ROUTE.ADMIN.USER_PROFILE,
+        element: <UserProfile />
+      },
+      ,
+      {
+        path: 'messenger',
+        element: <Messenger />
+      }
+    ]
   },
   {
 
@@ -122,24 +143,7 @@ const routes: RouteObject[] = [
       }
     ]
   },
-  {
-    path: 'dashboards',
-    element: <PrivateRoute><SidebarLayout /> </PrivateRoute>,
-    children: [
-      {
-        path: '',
-        element: <Navigate to="dashboard" replace />
-      },
-      {
-        path: 'dashboard',
-        element: <DashBoard />
-      },
-      {
-        path: 'messenger',
-        element: <Messenger />
-      }
-    ]
-  },
+
   {
     path: 'management',
     element: <PrivateRoute><SidebarLayout /> </PrivateRoute>,
