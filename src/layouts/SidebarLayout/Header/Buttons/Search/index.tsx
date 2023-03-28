@@ -100,7 +100,7 @@ function HeaderSearch() {
 
       <DialogWrapper
         open={open}
-        TransitionComponent={Transition}
+        // TransitionComponent={Transition}
         keepMounted
         maxWidth="md"
         fullWidth
@@ -128,147 +128,22 @@ function HeaderSearch() {
 
         {openSearchResults && (
           <DialogContent>
-            <Box
-              sx={{ pt: 0, pb: 1 }}
-              display="flex"
-              justifyContent="space-between"
-            >
-              <Typography variant="body2" component="span">
-                Search results for{' '}
-                <Typography
-                  sx={{ fontWeight: 'bold' }}
-                  variant="body1"
-                  component="span"
-                >
-                  {searchValue}
-                </Typography>
-              </Typography>
-              <Link href="#" variant="body2" underline="hover">
-                Advanced search
-              </Link>
-            </Box>
-            <Divider sx={{ my: 1 }} />
             <List disablePadding>
-              <ListItem button>
-                <Hidden smDown>
-                  <ListItemAvatar>
-                    <Avatar
-                      sx={{
-                        background: (theme: Theme) =>
-                          theme.palette.secondary.main
-                      }}
-                    >
-                      <FindInPageTwoToneIcon />
-                    </Avatar>
-                  </ListItemAvatar>
-                </Hidden>
-                <Box flex="1">
-                  <Box display="flex" justifyContent="space-between">
-                    <Link
-                      href="#"
-                      underline="hover"
-                      sx={{ fontWeight: 'bold' }}
-                      variant="body2"
-                    >
-                      Dashboard for Healthcare Platform
-                    </Link>
-                  </Box>
-                  <Typography
-                    component="span"
-                    variant="body2"
-                    sx={{
-                      color: (theme: Theme) =>
-                        lighten(theme.palette.secondary.main, 0.5)
-                    }}
-                  >
-                    This page contains all the necessary information for
-                    managing all hospital staff.
-                  </Typography>
-                </Box>
-                <ChevronRightTwoToneIcon />
+              <ListItem >
+                <Typography>
+                  Model1
+                </Typography>
               </ListItem>
               <Divider sx={{ my: 1 }} component="li" />
-              <ListItem button>
-                <Hidden smDown>
-                  <ListItemAvatar>
-                    <Avatar
-                      sx={{
-                        background: (theme: Theme) =>
-                          theme.palette.secondary.main
-                      }}
-                    >
-                      <FindInPageTwoToneIcon />
-                    </Avatar>
-                  </ListItemAvatar>
-                </Hidden>
-                <Box flex="1">
-                  <Box display="flex" justifyContent="space-between">
-                    <Link
-                      href="#"
-                      underline="hover"
-                      sx={{ fontWeight: 'bold' }}
-                      variant="body2"
-                    >
-                      Example Projects Application
-                    </Link>
-                  </Box>
-                  <Typography
-                    component="span"
-                    variant="body2"
-                    sx={{
-                      color: (theme: Theme) =>
-                        lighten(theme.palette.secondary.main, 0.5)
-                    }}
-                  >
-                    This is yet another search result pointing to a app page.
-                  </Typography>
-                </Box>
-                <ChevronRightTwoToneIcon />
+
+              <ListItem >
+                <Typography>
+                  Model2
+                </Typography>
               </ListItem>
               <Divider sx={{ my: 1 }} component="li" />
-              <ListItem button>
-                <Hidden smDown>
-                  <ListItemAvatar>
-                    <Avatar
-                      sx={{
-                        background: (theme: Theme) =>
-                          theme.palette.secondary.main
-                      }}
-                    >
-                      <FindInPageTwoToneIcon />
-                    </Avatar>
-                  </ListItemAvatar>
-                </Hidden>
-                <Box flex="1">
-                  <Box display="flex" justifyContent="space-between">
-                    <Link
-                      href="#"
-                      underline="hover"
-                      sx={{ fontWeight: 'bold' }}
-                      variant="body2"
-                    >
-                      Search Results Page
-                    </Link>
-                  </Box>
-                  <Typography
-                    component="span"
-                    variant="body2"
-                    sx={{
-                      color: (theme: Theme) =>
-                        lighten(theme.palette.secondary.main, 0.5)
-                    }}
-                  >
-                    Choose if you would like to show or not this typography
-                    section here...
-                  </Typography>
-                </Box>
-                <ChevronRightTwoToneIcon />
-              </ListItem>
             </List>
-            <Divider sx={{ mt: 1, mb: 2 }} />
-            <Box sx={{ textAlign: 'center' }}>
-              <Button color="primary">View all search results</Button>
-            </Box>
+
           </DialogContent>
         )}
       </DialogWrapper>

@@ -9,7 +9,8 @@ import {
   Button,
   TextField,
   Stack,
-  Divider
+  Divider,
+  InputAdornment,
 } from '@mui/material';
 import Label from 'src/components/Label';
 import { styled } from '@mui/material/styles';
@@ -19,7 +20,7 @@ import ArrowForwardTwoToneIcon from '@mui/icons-material/ArrowForwardTwoTone';
 import UploadTwoToneIcon from '@mui/icons-material/UploadTwoTone';
 import MoreHorizTwoToneIcon from '@mui/icons-material/MoreHorizTwoTone';
 import { useState } from 'react';
-
+import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
 const Input = styled('input')({
   display: 'none'
 });
@@ -81,22 +82,41 @@ const CardCoverAction = styled(Box)(
     bottom: ${theme.spacing(2)};
 `
 );
+const SearchInputWrapper = styled(TextField)(
+  ({ theme }) => `
+  background: ${theme.colors.alpha.white[100]};
 
+  .MuiInputBase-input {
+      font-size: ${theme.typography.pxToRem(17)};
+  }
+`
+);
 const ProfileCover = ({ user }) => {
-  const [uid, setUid] = useState<string>("-1")
+  const [uid, setUid] = useState<string>("")
   return (
     <>
-      <Card style={{ backgroundColor: "white", padding: "10px", paddingTop: "13px", }} >
+      <Card style={{ backgroundColor: "white", padding: "18px" }} >
 
         <Stack direction="column" spacing={3}>
+          <SearchInputWrapper
+            sx={{ pl: 0, pr: 0 }}
+            value={uid}
+            autoFocus={true}
+            onChange={(event) => {
+              setUid(event.target.value);
+            }}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchTwoToneIcon />
+                </InputAdornment>
+              )
+            }}
+            placeholder="Search user Id ..."
+            fullWidth
+            label="Search"
+          />
 
-          <TextField sx={{ width: 1 }} id="outlined-password-input" label="uid" type="number" autoComplete="current-password" onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-            setUid(event.target.value);
-          }} onKeyPress={(ev) => {
-            if (ev.key === 'Enter') {
-              console.log("search_ui_id" + uid);
-            }
-          }} />
           <Stack direction="row" spacing={3}>
             <Avatar style={{ borderRadius: 75 }} sx={{ width: 150, height: 150 }} variant="rounded" alt={user.name} src={user.avatar} />
 
