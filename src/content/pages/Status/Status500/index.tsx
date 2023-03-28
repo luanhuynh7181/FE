@@ -97,7 +97,7 @@ function Status500() {
                 >
                   Refresh view
                 </LoadingButton>
-                <Button href="/overview" variant="contained" sx={{ ml: 1 }}>
+                <Button variant="contained" sx={{ ml: 1 }}>
                   Go back
                 </Button>
               </Box>
@@ -126,7 +126,9 @@ function Status500() {
                     Material-UI components across multiple product niches for
                     fast &amp; perfect apps development processes.
                   </TypographySecondary>
-                  <Button href="/overview" size="large" variant="contained">
+                  <Button
+                    //href="/overview" 
+                    size="large" variant="contained">
                     Overview
                   </Button>
                 </Box>

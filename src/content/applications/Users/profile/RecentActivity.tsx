@@ -12,18 +12,18 @@ import {
   IconButton
 } from '@mui/material';
 import HeaderSearch from 'src/layouts/SidebarLayout/Header/Buttons/Search';
-
+import ReactJson from 'react-json-view'
 import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
 import ModelTree from './ModelTree';
-
 let userModel = {
   userId: 111,
   name: "luanhuynh",
   listGold: [1000, 2000, 300],
   listModel: {
     model: ["model1", "mode2", {
-      "name": "mode3",
-      "value": 4
+      "name": "mode22222222223",
+      "value": 4,
+      timeStart: 1678665600
     }]
   }
 
@@ -44,11 +44,10 @@ function RecentActivity() {
         label="Search model"
         type="search"
       />
-      <HeaderSearch />
+      {/* <HeaderSearch /> */}
       <Divider />
-      <Box sx={{ height: 600, width: 1, overflowY: 'auto' }}>
-
-        <ModelTree model={userModel} modelName={"userModel"} />
+      <Box sx={{ pt: 1, height: 600, width: 1, overflowY: 'auto' }}>
+        <ModelTree model={userModel} />
       </Box>
     </Card>
   );

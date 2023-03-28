@@ -1,6 +1,6 @@
 import { Box, styled, Tooltip } from '@mui/material';
 import { Link } from 'react-router-dom';
-
+import { PATH_ROUTE } from 'src/route/routeConst';
 const LogoWrapper = styled(Link)(
   ({ theme }) => `
         color: ${theme.palette.text.primary};
@@ -91,8 +91,8 @@ const LogoText = styled(Box)(
 
 function Logo() {
   return (
-    <LogoWrapper to="/overview">
-          <LogoSignInner />
+    <LogoWrapper to="/">
+      <LogoSignInner />
       <Box
         component="span"
         sx={{
