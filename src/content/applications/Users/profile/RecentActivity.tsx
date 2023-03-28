@@ -18,13 +18,17 @@ import ModelTree from './ModelTree';
 import SearchModel from './SearchModel';
 let userModel = {
   userId: 111,
+  timeStart: 1678665600,
   name: "luanhuynh",
+  is: true,
   listGold: [1000, 2000, 300],
   listModel: {
     model: ["model1", "mode2", {
       "name": "mode22222222223",
       "value": 4,
-      timeStart: 1678665600
+      timeStart: 1678665600,
+      timeSt2art: 1678665600000,
+      timeSt2ar3t: 1678665600000,
     }]
   }
 
@@ -34,7 +38,7 @@ function RecentActivity() {
   const theme = useTheme();
 
   const getBoxSize = () => {
-    return 600;
+    return 590;
   }
   return (
     <Card style={{ backgroundColor: "white", padding: "10px", paddingTop: "13px", }} >

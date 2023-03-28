@@ -11,6 +11,9 @@ function SignIn() {
   const dispatch = useDispatch();
   const adminPage = PATH_ROUTE.ADMIN.PATH;
   useEffect(() => {
+    if (Config.MODE == "DEV") {
+      navigate(adminPage)
+    }
     const userStorage = localStorage.getItem("user_data");
     console.log("userStorage", JSON.stringify(userStorage))
     let user: UserData = { ticket: "" };
