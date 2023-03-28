@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet-async';
 
 import { styled } from '@mui/material/styles';
 import Logo from 'src/components/LogoSign';
-import Hero from './Hero';
+import Hero from './Hero'
 
 const OverviewWrapper = styled(Box)(
   () => `
@@ -20,7 +20,7 @@ function Overview() {
       <Container maxWidth="lg">
         <Box display="flex" justifyContent="center" py={5} alignItems="center">
         </Box>
-          <Hero />
+        <Hero />
       </Container>
     </OverviewWrapper>
   );

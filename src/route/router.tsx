@@ -6,7 +6,7 @@ import SidebarLayout from 'src/layouts/SidebarLayout';
 import BaseLayout from 'src/layouts/BaseLayout';
 
 import SuspenseLoader from 'src/components/SuspenseLoader';
-import PrivateRoute from './components/PrivateRoute';
+import PrivateRoute from '../components/PrivateRoute';
 const Loader = (Component: any) => (props: any) =>
 (
   <Suspense fallback={<SuspenseLoader />}>
