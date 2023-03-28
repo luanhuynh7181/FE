@@ -12,6 +12,7 @@ import {
     DialogContent,
     DialogTitle,
     Slide,
+    Button,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { TransitionProps } from '@mui/material/transitions';
@@ -19,6 +20,7 @@ import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
 import { FC } from 'react';
 import { makeStyles } from '@mui/styles';
 import { modelSearch } from 'src/data/modelsearch';
+
 const Transition = forwardRef(function Transition(
     props: TransitionProps & { children: ReactElement<any, any> },
     ref: Ref<unknown>
@@ -63,6 +65,21 @@ const DialogTitleWrapper = styled(DialogTitle)(
 );
 
 const SearchModel: FC<{}> = ({ }) => {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     const [filterSearch, setFilterSearch] = useState([]);
     const [searchValue, setSearchValue] = useState('');
     // const [searchValue, setSearchValue] = useState('');
@@ -86,6 +103,11 @@ const SearchModel: FC<{}> = ({ }) => {
                 model.toLowerCase().indexOf(searchValue.toLowerCase()) > -1
         );
     }
+
+    const onclickButton = (e) => {
+        console.log("get model name", e.target.value)
+        setOpen(false);
+    }
     return (
         <>
             <Tooltip arrow title="Search">
@@ -95,12 +117,13 @@ const SearchModel: FC<{}> = ({ }) => {
             </Tooltip>
             <DialogWrapper
                 open={open}
-                TransitionComponent={Transition}
+                // TransitionComponent={Transition}
                 keepMounted
-                maxWidth="md"
+                maxWidth="sm"
                 fullWidth
                 scroll="paper"
                 onClose={handleClose}
+
             >
 
                 <DialogTitleWrapper>
@@ -126,9 +149,9 @@ const SearchModel: FC<{}> = ({ }) => {
                         filterSearch.map((modelName) => (
                             <List disablePadding key={modelName}>
                                 <ListItem >
-                                    <Typography>
+                                    <Button value={modelName} fullWidth style={{ justifyContent: "flex-start" }} variant="text" onClick={onclickButton}>
                                         {modelName}
-                                    </Typography>
+                                    </Button>
                                 </ListItem>
                                 <Divider component="li" />
                             </List>

@@ -1,0 +1,884 @@
+package model.dao;
+
+import bitzero.framework.dao.DAOUtil;
+import bitzero.framework.dao.ModelDAOMembaseImpl;
+import bitzero.framework.dao.ServerDAOMembaseImpl;
+import bitzero.framework.dao.model.AbstractCASUserModel;
+import bitzero.framework.dao.model.AbstractModel;
+import bitzero.framework.log4j.ExceptionLogger;
+import bitzero.framework.socialcontroller.bean.UserInfo;
+import bitzero.framework.util.FrameworkUtils;
+import bitzero.server.BitZeroServer;
+import bitzero.server.entities.User;
+import config.GameConfig;
+import constant.GameConstant;
+import log.log4j.EventLogger;
+import model.*;
+import model.ballinko.UBallinkoModel;
+import model.boosters_concept.UBoostersConceptModel;
+import model.buddy_guard.UBuddyGuardModel;
+import model.cache.UserModelContainerManager;
+import model.event.UEBirthdayModel;
+import model.event.UEHomeComingModel;
+import model.event.birthdaylookback.UEBirthdayLookBackModel;
+import model.event.boardquest.UEBoardQuestModel;
+import model.event.boardtrip.UEBoardTripModel;
+import model.event.catchfishes.UECatchFishesModel;
+import model.event.diamond.UEDiamondModel;
+import model.event.familyparty.UEFamilyPartyModel;
+import model.event.familyparty.UEFamilyPartyRoomModel;
+import model.event.findblast.UEFBModel;
+import model.event.findthemole.UECatchMoleModel;
+import model.event.fishingparty.UEFishingPartyModel;
+import model.event.matchitem.UEMatchItemModel;
+import model.event.noelparty.UNoelPartyModel;
+import model.event.questportal.UEQuestPortalModel;
+import model.event.snakeladder.UESnakeLadderModel;
+import model.event.soccerkick.UESoccerKickModel;
+import model.event.virusHunter.UEVirusHunterModel;
+import model.features.UThrowableItemModel;
+import model.features.avatarframe.UAvatarFrameModel;
+import model.features.battlepass.UBattlePassModel;
+import model.features.battlepass.USeasonalModel;
+import model.features.bracelets.UBraceletsModel;
+import model.features.conditional_spin.UConditionalSpinModel;
+import model.features.daily.UDailyGiftModel;
+import model.features.friend.UFriendRankingModel;
+import model.features.giftcode.global.UEGiftCodeModel;
+import model.features.gold_miner.UGoldMinerModel;
+import model.features.gotodlink.UEGotoModel;
+import model.features.invitefriend.UInviteFriendModel;
+import model.features.league.ULeagueModel;
+import model.features.levelroad.ULevelRoadModel;
+import model.features.loggold.ULogGoldModel;
+import model.features.offernonpay.UOfferNonPayModel;
+import model.features.offers.UDealPotLoverModel;
+import model.features.offers.UOfferNetModel;
+import model.features.offers.UTripleOfferModel;
+import model.features.piggybank.UPiggyBankModel;
+import model.features.recharge.URechargeModel;
+import model.features.slotmachine.USlotMachineModel;
+import model.features.support.UN1SupportModel;
+import model.features.survey.USurveyModel;
+import model.features.tandems.UTandemsCacheModel;
+import model.features.tandems.UTandemsModel;
+import model.labeluser.UUserLabelModel;
+import model.server.UKeyOnlineModel;
+import model.stats.BoardStatsModel;
+import model.stats.PaymentStatsModel;
+import model.stats.UserJourneyAbTestingModel;
+import model.system_offers.USystemOfferModel;
+import model.system_offers.USystemOfferTrackingKeyModel;
+import model.voucher.UVoucherModel;
+import net.spy.memcached.CASValue;
+
+import java.lang.reflect.Constructor;
+import java.util.concurrent.TimeUnit;
+
+/**
+ * Created by GSN on 10/29/2015.
+ */
+public class UserDAOImpl extends ModelDAOMembaseImpl {
+    static UserDAOImpl instance = null;
+
+    public static UserDAOImpl getInstance() {
+        if (instance == null) {
+            instance = new UserDAOImpl();
+        }
+        return instance;
+    }
+
+    public UProfileModel getUProfile(int uID) {
+        return getUProfile(uID, true);
+    }
+
+    public UProfileModel getUProfile(int uID, boolean update) {
+        return UserModelContainerManager.getInstance().getIfPresent(uID, UProfileModel.class, update);
+    }
+
+    public UTrackingModel getUTrackingModel(int id) {
+        UTrackingModel trackingModel = (UTrackingModel) getModel(id, UTrackingModel.class);
+
+        if (trackingModel != null) {
+            trackingModel.update();
+        }
+
+        return trackingModel;
+    }
+
+    public UProfileModel createUProfile(int uID, UserInfo userInfo) {
+        UProfileModel uProfileModel = new UProfileModel(uID);
+        uProfileModel.setUsername(userInfo.getUsername());
+        uProfileModel.setGold(0);
+        uProfileModel.setAvatarURL(userInfo.getAvatar_url());
+        uProfileModel.setDisplayName(userInfo.getDisplayname());
+        uProfileModel.setLastLoginTime(FrameworkUtils.currentTimeInSecond());
+
+//        uProfileModel.setAvatarURL(GameConfig.PREFIX_AVATAR_URL + "/ava_" + MyMath.random(0, 1999) + ".jpg");
+//        uProfileModel.setDisplayName(MyUtility.takeRandom(GameConfig.BOT_NAME_SET));
+
+        uProfileModel.save();
+
+        // map username -> uid
+        ServerDAOMembaseImpl.getInstance().set(GameConstant.PREFIX_USERNAME_TO_UID + uProfileModel.getUsername(), uID);
+        return uProfileModel;
+    }
+
+    public USupportModel getUSupportModel(int uId) {
+        USupportModel model = (USupportModel) getModel(uId, USupportModel.class);
+        if (model == null) {
+            model = new USupportModel(uId);
+        }
+
+        model.update();
+        return model;
+    }
+
+    public UVoucherModel getUVoucherModel(int uId) {
+        if (!(GameConfig.ENABLE_VOUCHER > 0)) return null;
+
+        UProfileModel uProfileModel = getUProfile(uId);
+        UVoucherModel uVoucherModel = (UVoucherModel) getModelAndSetOnRAM(uId, UVoucherModel.class, false);
+
+        // 1. khoi tao model cho non-pay user
+        if (uVoucherModel == null) {
+
+            long days = TimeUnit.DAYS.convert(FrameworkUtils.currentTimeInSecond() - uProfileModel.getCreateTime(), TimeUnit.SECONDS);
+            // 1.1 voi so ngay thoa man theo config
+            if (days >= GameConfig.MISC_VOUCHER.getAgeDay() || uProfileModel.getnPaying() > 0) {
+                // todo init vouchers
+                uVoucherModel = new UVoucherModel(uId);
+                setOnRAM(uId, UVoucherModel.class, uVoucherModel);
+            }
+        }
+        if (uVoucherModel != null) uVoucherModel.update();
+
+        return uVoucherModel;
+    }
+
+    public UFirstPayModel getUFirstPayModel(int uId) {
+        UFirstPayModel model = (UFirstPayModel) getModel(uId, UFirstPayModel.class);
+        if (model == null) {
+            model = new UFirstPayModel(uId);
+        }
+
+        model.update();
+        return model;
+    }
+
+    public BoardStatsModel getBoardStatisticalModel(int uId) {
+        BoardStatsModel model = (BoardStatsModel) getModelAndSetOnRAM(uId, BoardStatsModel.class);
+        if (model == null) {
+            model = new BoardStatsModel(uId);
+            model.save();
+
+            setOnRAM(uId, BoardStatsModel.class, model);
+        }
+        model.update();
+        return model;
+    }
+
+    public PaymentStatsModel getPaymentStatisticalModel(int uId) {
+        PaymentStatsModel model = (PaymentStatsModel) getModel(uId, PaymentStatsModel.class);
+        if (model == null) {
+            model = new PaymentStatsModel(uId);
+        }
+        model.update();
+        return model;
+    }
+
+    public UMailModel getUMailModel(int uId) {
+        UMailModel model = (UMailModel) getModel(uId, UMailModel.class);
+        if (model == null) {
+            model = new UMailModel(uId);
+            model.save();
+        }
+
+        model.update();
+        return model;
+    }
+
+    public UIAPModel getUIAPModel(int uId) {
+        UIAPModel model = (UIAPModel) getModelAndSetOnRAM(uId, UIAPModel.class, false);
+
+        if (model == null) {
+            model = new UIAPModel(uId);
+            model.save();
+
+            setOnRAM(uId, UIAPModel.class, model);
+        }
+
+        model.update();
+        return model;
+    }
+
+    public ULogGoldModel getULogGoldModel(int uId) {
+        ULogGoldModel model = (ULogGoldModel) getModelAndSetOnRAM(uId, ULogGoldModel.class, false);
+
+        if (model == null) {
+            model = new ULogGoldModel(uId);
+            model.save();
+
+            setOnRAM(uId, ULogGoldModel.class, model);
+        }
+
+        model.update();
+        return model;
+    }
+
+    public UThrowableItemModel getUThrowableItemModel(int userId) {
+        UThrowableItemModel model = (UThrowableItemModel) getModelAndSetOnRAM(userId, UThrowableItemModel.class, false);
+
+        if (model == null) {
+            model = new UThrowableItemModel(userId);
+            model.setNormalItems(GameConfig.THROWABLE_ITEM.getNormalItemsQuantity());
+            model.setVipItems(GameConfig.THROWABLE_ITEM.getVipItemsQuantity());
+
+            model.save();
+            setOnRAM(userId, UThrowableItemModel.class, model);
+        }
+
+        model.update();
+        return model;
+    }
+
+    public UTripleOfferModel getUTripleOfferModel(int userId) {
+        UTripleOfferModel model = (UTripleOfferModel) getEModelAndSetOnRAM(userId, UTripleOfferModel.class);
+
+        if (model == null) {
+            model = new UTripleOfferModel(userId);
+
+            //todo init default config
+
+            model.save();
+            setOnRAM(userId, UTripleOfferModel.class, model);
+        }
+
+        model.update();
+        return model;
+    }
+
+    public UDailyGiftModel getUDailyGiftModel(int uId) {
+        UDailyGiftModel model = (UDailyGiftModel) getModel(uId, UDailyGiftModel.class);
+        if (model == null) {
+            model = new UDailyGiftModel(uId);
+            model.save();
+        }
+
+        model.update();
+        return model;
+    }
+
+    public UOfferNetModel getUOfferNetModel(int userId) {
+        UOfferNetModel model = (UOfferNetModel) getModelAndSetOnRAM(userId, UOfferNetModel.class, false);
+
+        if (model == null) {
+
+            UProfileModel uProfileModel = getUProfile(userId);
+
+            if (uProfileModel.getCreateTime() + GameConfig.OFFER_NET_CONFIG.getAgeDay() > FrameworkUtils.currentTimeInSecond())
+                return null;
+
+            model = new UOfferNetModel(userId);
+            model.save();
+            setOnRAM(userId, UOfferNetModel.class, model);
+        }
+
+        model.update();
+        return model;
+    }
+
+    public UInviteFriendModel getUInviteFriendModel(int uId) {
+        UInviteFriendModel model = (UInviteFriendModel) getModel(uId, UInviteFriendModel.class);
+        if (model == null) {
+            model = new UInviteFriendModel(uId);
+            model.save();
+        }
+        model.update();
+        return model;
+    }
+
+    public UEGiftCodeModel getUEGiftCodeModel(int uId) {
+        UEGiftCodeModel model = (UEGiftCodeModel) getEModel(uId, UEGiftCodeModel.class);
+        if (model == null) {
+            model = new UEGiftCodeModel(uId);
+            model.save();
+        }
+        model.update();
+        return model;
+    }
+
+    public UEGotoModel getUEGotoModel(int uId) {
+        UEGotoModel model = (UEGotoModel) getEModel(uId, UEGotoModel.class);
+        if (model == null) {
+            model = new UEGotoModel(uId);
+            model.save();
+        }
+        model.update();
+        return model;
+    }
+
+
+    public UEHomeComingModel getUEHomeComingModel(int uId) {
+        UEHomeComingModel model = (UEHomeComingModel) getEModelAndSetOnRAM(uId, UEHomeComingModel.class);
+
+        if (model == null) {
+            model = new UEHomeComingModel(uId);
+            model.save();
+            setOnRAM(uId, UEHomeComingModel.class, model);
+        }
+
+        model.update();
+        return model;
+    }
+
+    public UDealPotLoverModel getUDealPotLover(int uId) {
+        UDealPotLoverModel model = (UDealPotLoverModel) getModelAndSetOnRAM(uId, UDealPotLoverModel.class, false);
+
+        if (model == null) {
+            model = new UDealPotLoverModel(uId);
+            model.save();
+            setOnRAM(uId, UDealPotLoverModel.class, model);
+        }
+        model.update();
+        return model;
+    }
+
+    public UEVirusHunterModel getUEVirusHunterModel(int uId) {
+        UEVirusHunterModel model = (UEVirusHunterModel) getEModelAndSetOnRAM(uId, UEVirusHunterModel.class);
+        if (model == null) {
+            model = new UEVirusHunterModel(uId);
+            model.save();
+            setOnRAM(uId, UEVirusHunterModel.class, model);
+        }
+        model.update();
+        return model;
+    }
+
+    public UEFishingPartyModel getUEFishingPartyModel(int uId) {
+        UEFishingPartyModel model = (UEFishingPartyModel) getEModelAndSetOnRAM(uId, UEFishingPartyModel.class);
+        if (model == null) {
+            model = new UEFishingPartyModel(uId);
+            model.save();
+            setOnRAM(uId, UEFishingPartyModel.class, model);
+        }
+        model.update();
+        return model;
+    }
+
+    public UAvatarFrameModel getUAvatarFrameModel(int uId) {
+        return UserModelContainerManager.getInstance().getAndCreateIfAbsent(uId, UAvatarFrameModel.class);
+    }
+
+
+    public UECatchFishesModel getUECatchFishesModel(int uId) {
+        UECatchFishesModel model = (UECatchFishesModel) getEModelAndSetOnRAM(uId, UECatchFishesModel.class);
+        if (model == null) {
+            model = new UECatchFishesModel(uId);
+            model.save();
+            setOnRAM(uId, UECatchFishesModel.class, model);
+        }
+        model.update();
+        return model;
+    }
+
+
+    public USystemOfferModel getUSystemOffers(int uId) {
+        USystemOfferModel model = (USystemOfferModel) getEModelAndSetOnRAM(uId, USystemOfferModel.class);
+
+        if (model == null) {
+            model = new USystemOfferModel(uId);
+            model.save();
+            setOnRAM(uId, USystemOfferModel.class, model);
+        }
+
+        model.update();
+        return model;
+    }
+
+    public UESnakeLadderModel getUESnakeLadderModel(int uId) {
+        UESnakeLadderModel model = (UESnakeLadderModel) getEModelAndSetOnRAM(uId, UESnakeLadderModel.class);
+        if (model == null) {
+            model = new UESnakeLadderModel(uId);
+            model.save();
+            setOnRAM(uId, UESnakeLadderModel.class, model);
+        }
+        model.update();
+        return model;
+    }
+
+    public UEBoardQuestModel getUEBoardQuestModel(int uId) {
+        UEBoardQuestModel model = (UEBoardQuestModel) getEModelAndSetOnRAM(uId, UEBoardQuestModel.class);
+        if (model == null) {
+            model = new UEBoardQuestModel(uId);
+            model.save();
+            setOnRAM(uId, UEBoardQuestModel.class, model);
+        }
+        model.update();
+        return model;
+    }
+
+
+    public UEBoardTripModel getUEBoardTripModel(int uId) {
+        UEBoardTripModel model = (UEBoardTripModel) getEModelAndSetOnRAM(uId, UEBoardTripModel.class);
+        if (model == null) {
+            model = new UEBoardTripModel(uId);
+            model.save();
+            setOnRAM(uId, UEBoardTripModel.class, model);
+        }
+        model.update();
+        return model;
+    }
+
+    public UEBirthdayModel getUEBirthdayModel(int uId) {
+        UEBirthdayModel model = (UEBirthdayModel) getEModelAndSetOnRAM(uId, UEBirthdayModel.class);
+        if (model == null) {
+            model = new UEBirthdayModel(uId);
+            model.save();
+            setOnRAM(uId, UEBirthdayModel.class, model);
+        }
+        model.update();
+        return model;
+    }
+
+    public UECatchMoleModel getUECatchMoleModel(int uId) {
+        UECatchMoleModel model = (UECatchMoleModel) getEModelAndSetOnRAM(uId, UECatchMoleModel.class);
+        if (model == null) {
+            model = new UECatchMoleModel(uId);
+            model.save();
+            setOnRAM(uId, UECatchMoleModel.class, model);
+        }
+        model.update();
+        return model;
+    }
+
+    public UEFamilyPartyModel getUEFamilyPartyModel(int uId) {
+        UEFamilyPartyModel model = (UEFamilyPartyModel) getEModelAndSetOnRAM(uId, UEFamilyPartyModel.class);
+        if (model == null) {
+            model = new UEFamilyPartyModel(uId);
+            model.save();
+            setOnRAM(uId, UEFamilyPartyModel.class, model);
+        }
+        model.update();
+        return model;
+    }
+
+    public UEFamilyPartyRoomModel getUEFamilyPartyRoomModel(int activateUserId) {
+        UEFamilyPartyRoomModel model = (UEFamilyPartyRoomModel) getEModel(activateUserId, UEFamilyPartyRoomModel.class);
+        if (model == null) {
+            model = new UEFamilyPartyRoomModel(activateUserId);
+            model.save();
+        }
+        model.update();
+        return model;
+    }
+
+    public UEQuestPortalModel getUEQuestPortalModel(int uId) {
+        UEQuestPortalModel model = (UEQuestPortalModel) getEModel(uId, UEQuestPortalModel.class);
+        if (model == null) {
+            model = new UEQuestPortalModel(uId);
+            model.save();
+            setOnRAM(uId, UEQuestPortalModel.class, model);
+        }
+        model.update();
+        return model;
+    }
+
+    public UPiggyBankModel getUPiggyBankModel(int uId) {
+        UPiggyBankModel model = (UPiggyBankModel) getModelAndSetOnRAM(uId, UPiggyBankModel.class, false);
+        if (model == null) {
+            model = new UPiggyBankModel(uId);
+            model.save();
+            setOnRAM(uId, UPiggyBankModel.class, model);
+        }
+        model.update();
+        return model;
+    }
+
+    public USlotMachineModel getUSlotMachineModel(int uId) {
+        USlotMachineModel model = (USlotMachineModel) getModelAndSetOnRAM(uId, USlotMachineModel.class, false);
+        if (model == null) {
+            model = new USlotMachineModel(uId);
+            model.save();
+            setOnRAM(uId, USlotMachineModel.class, model);
+        }
+        model.update();
+        return model;
+    }
+
+    public <T extends AbstractCASUserModel> T getCASUserModel(int uId, Class<T> clazz) {
+        T model = null;
+        User user = BitZeroServer.getInstance().getUserManager().getUserById(uId);
+        if (user != null) {
+            synchronized (user) {
+                Object value = user.getProperty(clazz);
+                if (value == null) {
+                    model = getCASUserModelFromDB(uId, clazz);
+                    if (model != null) {
+                        user.setProperty(clazz, model);
+                    }
+                    return model;
+                }
+                model = (T) value;
+                return model;
+            }
+        }
+        model = getCASUserModelFromDB(uId, clazz);
+        return model;
+    }
+
+    private <T extends AbstractCASUserModel> T getCASUserModelFromDB(int uId, Class<T> clazz) {
+        try {
+            CASValue casValue = this.getCASValueModel(uId, clazz);
+            //init model
+            if (casValue == null) {
+                Constructor<T> constructor = clazz.getDeclaredConstructor(Integer.TYPE);
+                T model = constructor.newInstance(uId);
+                model.init();
+
+                casValue = this.getCASValueModel(uId, clazz);
+            }
+            T model = this.getModelFromCAS(casValue, clazz);
+
+            return model;
+        } catch (Exception e) {
+            ExceptionLogger.getInstance().error(uId, "exception on getCASUserModel:", clazz.getSimpleName());
+            return null;
+        }
+    }
+
+    public UKeyOnlineModel getUKeyOnlineModel(int uId) {
+        return UserDAOImpl.getInstance().getCASUserModel(uId, UKeyOnlineModel.class);
+    }
+
+    public UESoccerKickModel getUESoccerKickModel(int uId) {
+        UESoccerKickModel model = (UESoccerKickModel) getEModelAndSetOnRAM(uId, UESoccerKickModel.class);
+        if (model == null) {
+            model = new UESoccerKickModel(uId);
+            model.save();
+            setOnRAM(uId, UESoccerKickModel.class, model);
+        }
+        model.update();
+        return model;
+    }
+
+    public UEDiamondModel getUEDiamondModel(int uId) {
+        UEDiamondModel model = (UEDiamondModel) getEModelAndSetOnRAM(uId, UEDiamondModel.class);
+        if (model == null) {
+            model = new UEDiamondModel(uId);
+            model.save();
+            setOnRAM(uId, UEDiamondModel.class, model);
+        }
+        model.update();
+        return model;
+    }
+
+    public UEBirthdayLookBackModel getUEBirthDayLookBackModel(int uId) {
+        UEBirthdayLookBackModel model = (UEBirthdayLookBackModel) getEModelAndSetOnRAM(uId, UEBirthdayLookBackModel.class);
+        if (model == null) {
+            model = new UEBirthdayLookBackModel(uId);
+            model.save();
+            setOnRAM(uId, UEBirthdayLookBackModel.class, model);
+        }
+        model.update();
+        return model;
+    }
+
+    public UConditionalSpinModel getUConditionalSpinModel(int uId) {
+        UConditionalSpinModel model = (UConditionalSpinModel) getModelAndSetOnRAM(uId, UConditionalSpinModel.class);
+        if (model == null) {
+            model = new UConditionalSpinModel(uId);
+            model.save();
+            setOnRAM(uId, UConditionalSpinModel.class, model);
+        }
+        model.update();
+        return model;
+    }
+
+    public USurveyModel getUSurveyModel(int uId) {
+        USurveyModel model = (USurveyModel) getModelAndSetOnRAM(uId, USurveyModel.class);
+        if (model == null) {
+            model = new USurveyModel(uId);
+            setOnRAM(uId, USurveyModel.class, model);
+            model.save();
+        }
+        model.update();
+        return model;
+    }
+
+    private static UBoostersConceptModel getUBoostersConceptOnDB(String key) {
+        Class<?> c = UBoostersConceptModel.class;
+        String localKey = DAOUtil.getModelKey(key, c);
+        try {
+            return (UBoostersConceptModel) UBoostersConceptModel.bcGson.fromJson((String) ServerDAOMembaseImpl.getInstance().get(localKey), c);
+        } catch (Exception e) {
+            EventLogger.getInstance().error(localKey, e);
+            ExceptionLogger.getInstance().error("UserDaoImpl getUBoosterConceptOnDB", localKey, e);
+            return null;
+        }
+    }
+
+    private UBoostersConceptModel getUBoostersConceptModelAndSetOnRAM(int uID) {
+        Class c = UBoostersConceptModel.class;
+        UBoostersConceptModel model = null;
+        User user = BitZeroServer.getInstance().getUserManager().getUserById(uID);
+        if (user != null) {
+            synchronized (user) {
+                if (user.containsProperty(c)) {
+                    model = (UBoostersConceptModel) user.getProperty(c);
+                } else {
+                    model = getUBoostersConceptOnDB(uID + "");
+                    if (model != null) {
+                        user.setProperty(c, model);
+                    }
+                }
+            }
+        } else {
+            model = getUBoostersConceptOnDB(uID + "");
+        }
+        return model;
+    }
+
+    public UBoostersConceptModel getUBoostersConceptModel(int id) {
+        UBoostersConceptModel model = getUBoostersConceptModelAndSetOnRAM(id);
+
+        if (model == null) {
+            model = new UBoostersConceptModel(id);
+            model.save();
+
+            setOnRAM(id, UBoostersConceptModel.class, model);
+        }
+        model.update();
+        return model;
+    }
+
+    public UBuddyGuardModel getUBuddyGuardModel(int uId) {
+        UBuddyGuardModel model = (UBuddyGuardModel) getModelAndSetOnRAM(uId, UBuddyGuardModel.class);
+        if (model == null) {
+            model = new UBuddyGuardModel(uId);
+            model.save();
+            setOnRAM(uId, UBuddyGuardModel.class, model);
+        }
+        model.update();
+        return model;
+    }
+
+    public URechargeModel getURechargeModel(int uId) {
+        URechargeModel model = (URechargeModel) getModelAndSetOnRAM(uId, URechargeModel.class);
+
+        if (model == null) {
+            model = new URechargeModel(uId);
+            model.save();
+            setOnRAM(uId, URechargeModel.class, model);
+        }
+
+        model.update();
+        return model;
+    }
+
+    public UGoldMinerModel getGoldMinerModel(int uId) {
+        UGoldMinerModel model = (UGoldMinerModel) getEModelAndSetOnRAM(uId, UGoldMinerModel.class);
+        if (model == null) {
+            model = new UGoldMinerModel(uId);
+            model.save();
+            setOnRAM(uId, UGoldMinerModel.class, model);
+        }
+        model.update();
+        return model;
+    }
+
+    public UBraceletsModel getUBraceletsModel(int uId) {
+        UBraceletsModel model = (UBraceletsModel) getModelAndSetOnRAM(uId, UBraceletsModel.class);
+        if (model == null) {
+            model = new UBraceletsModel(uId);
+            model.save();
+            setOnRAM(uId, UBraceletsModel.class, model);
+        }
+        model.update();
+        return model;
+    }
+
+    public ULevelRoadModel getULevelRoadModel(int uId) {
+        ULevelRoadModel model = (ULevelRoadModel) getModelAndSetOnRAM(uId, ULevelRoadModel.class);
+        if (model == null) {
+            model = new ULevelRoadModel(uId);
+            model.save();
+
+            setOnRAM(uId, ULevelRoadModel.class, model);
+        }
+
+        model.update();
+        return model;
+    }
+
+    public UserJourneyAbTestingModel getUserJourneyAbTestingModel(int uId) {
+        UserJourneyAbTestingModel model = (UserJourneyAbTestingModel) getModel(uId, UserJourneyAbTestingModel.class);
+        if (model == null) {
+            model = new UserJourneyAbTestingModel(uId);
+            model.save();
+        }
+
+        model.update();
+        return model;
+    }
+
+    public UUserLabelModel getUUserLabelModel(int uId) {
+        UUserLabelModel model = (UUserLabelModel) getModelAndSetOnRAM(uId, UUserLabelModel.class);
+        if (model == null) {
+            model = new UUserLabelModel(uId);
+            model.save();
+
+            setOnRAM(uId, UUserLabelModel.class, model);
+        }
+        model.update();
+        return model;
+    }
+
+    public UTandemsModel getUTandemsModel(int uId) {
+        UTandemsModel model = (UTandemsModel) getModelAndSetOnRAM(uId, UTandemsModel.class);
+        if (model == null) {
+            model = new UTandemsModel(uId);
+            model.save();
+
+            setOnRAM(uId, UTandemsModel.class, model);
+        }
+        model.update();
+        return model;
+    }
+
+    public UTandemsCacheModel getUTandemsCacheModel(int uId) {
+        UTandemsCacheModel model = null;
+        User user = BitZeroServer.getInstance().getUserManager().getUserById(uId);
+        if (user != null) {
+            if (user.containsProperty(UTandemsCacheModel.class)) {
+                model = (UTandemsCacheModel) user.getProperty(UTandemsCacheModel.class);
+            } else {
+                synchronized (user) {
+                    if (user.containsProperty(UTandemsCacheModel.class)) {
+                        model = (UTandemsCacheModel) user.getProperty(UTandemsCacheModel.class);
+                    } else {
+                        model = (UTandemsCacheModel) this.getCacheModel(uId, UTandemsCacheModel.class);
+                        if (model == null) {
+                            model = new UTandemsCacheModel(uId);
+                        }
+                        user.setProperty(UTandemsCacheModel.class, model);
+                    }
+                }
+            }
+        } else {
+            model = (UTandemsCacheModel) this.getCacheModel(uId, UTandemsCacheModel.class);
+        }
+
+        if (model != null) {
+            model.update();
+        }
+
+        return model;
+    }
+
+    private AbstractModel getCacheModel(int uId, Class<? extends AbstractModel> c) {
+        String localKey = DAOUtil.getModelKey(uId + "", c);
+        try {
+            return (AbstractModel) ServerDAOMembaseImpl.getInstance().getCache(localKey, c);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public UEMatchItemModel getUEMatchItemModel(int uId) {
+        UEMatchItemModel model = (UEMatchItemModel) getEModelAndSetOnRAM(uId, UEMatchItemModel.class);
+        if (model == null) {
+            model = new UEMatchItemModel(uId);
+            model.save();
+            setOnRAM(uId, UEMatchItemModel.class, model);
+        }
+        model.update();
+        return model;
+    }
+
+
+    public ULeagueModel getULeagueModel(int uId) {
+        return UserModelContainerManager.getInstance().getAndCreateIfAbsent(uId, ULeagueModel.class);
+    }
+
+    public UBattlePassModel getUBattlePassModel(int userId) {
+        UBattlePassModel model = (UBattlePassModel) getModelAndSetOnRAM(userId, UBattlePassModel.class);
+        if (model == null) {
+            model = new UBattlePassModel(userId);
+            model.save();
+            setOnRAM(userId, UBattlePassModel.class, model);
+        }
+        model.update();
+        return model;
+    }
+
+    public USeasonalModel getUSeasonalModel(int uId) {
+        return UserModelContainerManager.getInstance().getAndCreateIfAbsent(uId, USeasonalModel.class);
+    }
+
+    public UFriendRankingModel getUFriendRankingModel(int uId) {
+        return UserModelContainerManager.getInstance().getAndCreateIfAbsent(uId, UFriendRankingModel.class);
+    }
+
+    public UBallinkoModel getUBallinkoModel(int userId) {
+        UBallinkoModel model = (UBallinkoModel) getModelAndSetOnRAM(userId, UBallinkoModel.class);
+        if (model == null) {
+            model = new UBallinkoModel(userId);
+            model.save();
+            setOnRAM(userId, UBallinkoModel.class, model);
+        }
+        model.update();
+        return model;
+    }
+
+    public UNoelPartyModel getUNoelPartyModel(int userId) {
+        UNoelPartyModel model = (UNoelPartyModel) getModelAndSetOnRAM(userId, UNoelPartyModel.class);
+        if (model == null) {
+            model = new UNoelPartyModel(userId);
+            model.save();
+            setOnRAM(userId, UNoelPartyModel.class, model);
+        }
+        model.update();
+        return model;
+    }
+
+    public UEFBModel getUEFBModel(int uId) {
+        UEFBModel model = (UEFBModel) getEModelAndSetOnRAM(uId, UEFBModel.class);
+
+        if (model == null) {
+            model = new UEFBModel(uId);
+            model.save();
+            setOnRAM(uId, UEFBModel.class, model);
+        }
+
+        model.update();
+        return model;
+    }
+
+    public UOfferNonPayModel getUOfferNonPayModel(int uId) {
+        return UserModelContainerManager.getInstance().getAndCreateIfAbsent(uId, UOfferNonPayModel.class);
+    }
+
+    public UN1SupportModel getUN1SupportModel(int uId) {
+        UN1SupportModel model = (UN1SupportModel) getModelAndSetOnRAM(uId, UN1SupportModel.class);
+        if (model == null) {
+            model = new UN1SupportModel(uId);
+            model.save();
+            setOnRAM(uId, UN1SupportModel.class, model);
+        }
+        model.update();
+        return model;
+    }
+
+    public USystemOfferTrackingKeyModel getUSystemOfferTrackingKeyModel(int uId) {
+        USystemOfferTrackingKeyModel model = (USystemOfferTrackingKeyModel) getModelAndSetOnRAM(uId, USystemOfferTrackingKeyModel.class);
+        if (model == null) {
+            model = new USystemOfferTrackingKeyModel(uId);
+            model.save();
+            setOnRAM(uId, USystemOfferTrackingKeyModel.class, model);
+        }
+        model.update();
+        return model;
+    }
+}
