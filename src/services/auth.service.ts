@@ -1,21 +1,15 @@
 import axios from "axios";
+import { UserData } from "src/data/UserDataSplice";
 
-const API_URL = "http://localhost:8080/api/auth/";
+const API_URL = "http://localhost:4000/auth/";
 
 class AuthService {
-  login(username: string, password: string) {
-    return axios
-      .post(API_URL + "signin", {
-        username,
-        password
-      })
-      .then(response => {
-        if (response.data.accessToken) {
-          localStorage.setItem("user", JSON.stringify(response.data));
-        }
+  async login(ticket): Promise<any> {
+    return axios.post(API_URL + "login?ticket=" + ticket)
+  }
 
-        return response.data;
-      });
+  verifyCookie(): Promise<UserData> {
+    return axios.get(API_URL);
   }
 
   logout() {

@@ -83,16 +83,15 @@ const routes: RouteObject[] = [
     element: <SignIn />
   },
   {
-    path: PATH_ROUTE.ADMIN.PATH,
+    path: PATH_ROUTE.HOME.PATH,
+    element: <DashBoard />
+  },
+  {
+    path: PATH_ROUTE.HOME.PATH,
     element: <PrivateRoute><SidebarLayout /> </PrivateRoute>,
     children: [
-
       {
-        path: '',
-        element: <DashBoard />
-      },
-      {
-        path: PATH_ROUTE.ADMIN.USER_PROFILE,
+        path: PATH_ROUTE.HOME.USER_PROFILE,
         element: <UserProfile />
       },
       ,

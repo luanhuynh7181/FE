@@ -188,7 +188,7 @@ function SidebarMenu() {
                   disableRipple
                   component={RouterLink}
                   onClick={closeSidebar}
-                  to={PATH_ROUTE.ADMIN.PATH}
+                  to={PATH_ROUTE.HOME.PATH}
                   startIcon={<DesignServicesTwoToneIcon />}
                 >
                   Dashboard
@@ -271,7 +271,7 @@ function SidebarMenu() {
                   disableRipple
                   component={RouterLink}
                   onClick={closeSidebar}
-                  to={PATH_ROUTE.ADMIN.PATH + "/" + PATH_ROUTE.ADMIN.USER_PROFILE}
+                  to={PATH_ROUTE.HOME.PATH + "/" + PATH_ROUTE.HOME.USER_PROFILE}
                   startIcon={<AccountCircleTwoToneIcon />}
                 >
                   User Profile
