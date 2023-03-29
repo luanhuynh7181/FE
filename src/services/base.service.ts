@@ -10,15 +10,21 @@ const HEADERS = {
     'Access-Control-Allow-Origin': '*'
 };
 
+
+interface BaseServiceProps {
+    baseURL?: string,
+    timeout?: number,
+    headers?: any,
+    auth?: any
+}
+
+/* eslint-disable  @typescript-eslint/no-unused-vars */
 class BaseService {
     client;
-    constructor({ baseURL = API_ROOT, timeout = TIMEOUT, headers = HEADERS, auth }) {
-        const client = axios.create({
-            baseURL,
-            timeout,
-            headers,
-            auth
-        });
+    // @ts-ignore
+    constructor(props: BaseServiceProps = { baseURL: API_ROOT, timeout: TIMEOUT, headers: HEADERS }) {
+
+        const client = axios.create({ ...props });
 
         client.interceptors.response.use(this.handleSuccess, this.handleError);
         client.interceptors.request.use(function (config) {
@@ -46,7 +52,7 @@ class BaseService {
         return Promise.reject(message);
     }
 
-    get(path) {
+    get(path: string = "") {
         return this.client.get(path).then((response) => response.data);
     }
 
@@ -68,3 +74,5 @@ class BaseService {
 }
 
 export default BaseService;
+
+/* eslint-enable  @typescript-eslint/no-unused-vars */

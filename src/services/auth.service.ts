@@ -8,27 +8,27 @@ class AuthService extends BaseService {
   }
 
   verifyCookie(): Promise<UserData> {
-    return axios.get(API_URL);
+    return this.get();
   }
 
-  logout() {
-    localStorage.removeItem("user");
-  }
+  // logout() {
+  //   localStorage.removeItem("user");
+  // }
 
-  register(username: string, email: string, password: string) {
-    return axios.post(API_URL + "signup", {
-      username,
-      email,
-      password
-    });
-  }
+  // register(username: string, email: string, password: string) {
+  //   return axios.post(API_URL + "signup", {
+  //     username,
+  //     email,
+  //     password
+  //   });
+  // }
 
-  getCurrentUser() {
-    const userStr = localStorage.getItem("user");
-    if (userStr) return JSON.parse(userStr);
+  // getCurrentUser() {
+  //   const userStr = localStorage.getItem("user");
+  //   if (userStr) return JSON.parse(userStr);
 
-    return null;
-  }
+  //   return null;
+  // }
 }
 
-export default new AuthService();
+export default new AuthService(undefined);
