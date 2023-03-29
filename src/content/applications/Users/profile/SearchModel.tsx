@@ -90,6 +90,8 @@ const SearchModel: FC<{}> = ({ }) => {
     const [open, setOpen] = useState(false);
 
     const handleClickOpen = () => {
+        setSearchValue('');
+        setFilterSearch([])
         setOpen(true);
     };
 
@@ -98,6 +100,7 @@ const SearchModel: FC<{}> = ({ }) => {
     };
 
     const filteredModel = (searchValue: string) => {
+        if (searchValue == '') return [];
         return modelSearch.filter(
             (model) =>
                 model.toLowerCase().indexOf(searchValue.toLowerCase()) > -1
