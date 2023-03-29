@@ -1,11 +1,10 @@
-import axios from "axios";
 import { UserData } from "src/data/UserDataSplice";
+import BaseService from "./base.service";
 
-const API_URL = "http://localhost:4000/auth/";
 
-class AuthService {
+class AuthService extends BaseService {
   async login(ticket): Promise<any> {
-    return axios.post(API_URL + "login?ticket=" + ticket)
+    return this.post("login?ticket=" + ticket);
   }
 
   verifyCookie(): Promise<UserData> {
