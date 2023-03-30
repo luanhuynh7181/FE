@@ -4,11 +4,12 @@ import BaseService from "./base.service";
 
 class AuthService extends BaseService {
   async login(ticket): Promise<any> {
-    return this.post("login?ticket=" + ticket);
+    console.log("/auth/login" + ticket)
+    return this.post("/auth/login?ticket=" + ticket);
   }
 
-  verifyCookie(): Promise<UserData> {
-    return this.get();
+  verifyCookie(): any {
+    return this.get("/auth");
   }
 
   // logout() {
@@ -31,4 +32,4 @@ class AuthService extends BaseService {
   // }
 }
 
-export default new AuthService(undefined);
+export default new AuthService();

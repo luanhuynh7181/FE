@@ -21,7 +21,7 @@ const SignIn = Loader(lazy(() => import('src/content/SignIn')));
 
 // Dashboards
 
-const DashBoard = Loader(lazy(() => import('src/content/dashboards/dashboard')));
+const Home = Loader(lazy(() => import('src/content/dashboards/dashboard')));
 
 // Applications
 
@@ -79,16 +79,16 @@ const StatusMaintenance = Loader(
 
 const routes: RouteObject[] = [
   {
-    path: PATH_ROUTE.SIGN_IN.PATH,
+    path: PATH_ROUTE.LOGIN.PATH,
     element: <SignIn />
   },
   {
     path: PATH_ROUTE.HOME.PATH,
-    element: <DashBoard />
+    element: <Home />
   },
   {
     path: PATH_ROUTE.HOME.PATH,
-    element: <PrivateRoute><SidebarLayout /> </PrivateRoute>,
+    element: <PrivateRoute><SidebarLayout /></PrivateRoute>,
     children: [
       {
         path: PATH_ROUTE.HOME.USER_PROFILE,

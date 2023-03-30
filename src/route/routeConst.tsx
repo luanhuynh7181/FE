@@ -1,6 +1,6 @@
 
 export const PATH_ROUTE = {
-    SIGN_IN: {
+    LOGIN: {
         PATH: "/login"
     },
 
