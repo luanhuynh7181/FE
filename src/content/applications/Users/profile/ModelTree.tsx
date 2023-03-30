@@ -24,24 +24,14 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ExpandMoreTwoToneIcon from '@mui/icons-material/ExpandMoreTwoTone';
 import { useSelector, useDispatch } from 'react-redux';
 import { setModelUser, selectUserData, UserModelDao } from 'src/data/UserModelDaoSplice';
+import homeService from 'src/services/home.service';
 interface ModelTreeProps {
     model?: Object;
 }
 const ModelTree: FC<ModelTreeProps> = () => {
     const userModelDao: UserModelDao = useSelector(selectUserData);
-    const dispatch = useDispatch();
-    useEffect(() => {
-        setTimeout(() => {
-            console.log("setModeluser");
-            let u: UserModelDao = {
-                model: {
-                    "test": 1
-                }
-            }
 
-            dispatch(setModelUser(u));
-        }, 3000);
-    }, [])
+
     const convertToDate = (value: number) => {
         let org = value;
         if (value < 120000000000) { //12B
@@ -88,11 +78,12 @@ const ModelTree: FC<ModelTreeProps> = () => {
 
         })
     }
-    leafTraverseObject(userModelDao.model);
+    leafTraverseObject(userModelDao);
+    console.log("sadas", JSON.stringify(userModelDao))
     return (
         <>
             <ReactJson
-                src={userModelDao.model} style={{ fontSize: 20, backgroundColor: 'white' }}
+                src={userModelDao} style={{ fontSize: 20, backgroundColor: 'white' }}
                 theme="summerfruit:inverted"
                 displayDataTypes={false}
                 enableClipboard={false}

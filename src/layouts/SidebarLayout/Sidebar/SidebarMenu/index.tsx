@@ -6,7 +6,7 @@ import DesignServicesTwoToneIcon from '@mui/icons-material/DesignServicesTwoTone
 import AccountCircleTwoToneIcon from '@mui/icons-material/AccountCircleTwoTone';
 import DisplaySettingsTwoToneIcon from '@mui/icons-material/DisplaySettingsTwoTone';
 import { PATH_ROUTE } from 'src/route/routeConst';
-import { MenuWrapper, SubMenuWrapper } from './MainCss';
+import { MenuWrapper, SubMenuWrapper } from './Styled';
 function SidebarMenu() {
   const { closeSidebar } = useContext(SidebarContext);
   function createItem(path: string, iconStart: any, name: string) {

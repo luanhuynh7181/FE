@@ -32,7 +32,6 @@ class BaseService {
         client.interceptors.request.use(function (config) {
             let token = ""; //get from redux
             if (token) {
-                console.log("asddada ", config.headers.Authorization)
                 config.headers.Authorization = `Bearer ${token}`;
             }
             return config;

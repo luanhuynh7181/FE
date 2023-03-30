@@ -3,11 +3,10 @@ import type { RootState } from '../app/store'
 
 // Define a type for the slice state
 export interface UserModelDao {
-    model: {}
 }
 // Define the initial state using that type
 export const initialState: UserModelDao = {
-    model: {}
+
 }
 
 export const UserModelDaoSlice = createSlice({
@@ -16,7 +15,7 @@ export const UserModelDaoSlice = createSlice({
     initialState,
     reducers: {
         // Use the PayloadAction type to declare the contents of `action.payload`
-        setModelUser: (state, action: PayloadAction<UserModelDao>) => {
+        setModelUser: (state, action: PayloadAction<{}>) => {
             state = action.payload;
             return state;
         }

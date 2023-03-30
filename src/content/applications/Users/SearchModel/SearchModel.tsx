@@ -1,88 +1,26 @@
-import { forwardRef, Ref, useState, ReactElement, ChangeEvent } from 'react';
+import { useState, ChangeEvent } from 'react';
 import {
     Divider,
     IconButton,
     InputAdornment,
     List,
     ListItem,
-    TextField,
     Tooltip,
-    Typography,
-    Dialog,
     DialogContent,
-    DialogTitle,
-    Slide,
     Button,
 } from '@mui/material';
-import { styled } from '@mui/material/styles';
-import { TransitionProps } from '@mui/material/transitions';
 import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
 import { FC } from 'react';
-import { makeStyles } from '@mui/styles';
 import { modelSearch } from 'src/data/modelsearch';
-
-const Transition = forwardRef(function Transition(
-    props: TransitionProps & { children: ReactElement<any, any> },
-    ref: Ref<unknown>
-) {
-    return <Slide direction="down" ref={ref} {...props} />;
-});
-
-const DialogWrapper = styled(Dialog)(
-    () => `
-    .MuiDialog-container {
-        height: auto;
-    }
-    
-    .MuiDialog-paperScrollPaper {
-        max-height: calc(100vh - 64px)
-    }
-`
-);
-
-const SearchInputWrapper = styled(TextField)(
-    ({ theme }) => `
-    background: ${theme.colors.alpha.white[100]};
-
-    .MuiInputBase-input {
-        font-size: ${theme.typography.pxToRem(17)};
-    }
-`
-);
-
-const useStyles = makeStyles({
-    dialog: {
-        position: 'absolute',
-        left: 10,
-        top: 50
-    }
-});
-const DialogTitleWrapper = styled(DialogTitle)(
-    ({ theme }) => `
-    background: ${theme.colors.alpha.black[5]};
-    padding: ${theme.spacing(3)}
-`
-);
-
+import homeService from 'src/services/home.service';
+import { useDispatch } from 'react-redux';
+import { setModelUser } from 'src/data/UserModelDaoSplice';
+import { initialState } from '../../../../data/UserModelDaoSplice';
+import { Transition, DialogWrapper, SearchInputWrapper, DialogTitleWrapper } from './Styled';
 const SearchModel: FC<{}> = ({ }) => {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     const [filterSearch, setFilterSearch] = useState([]);
     const [searchValue, setSearchValue] = useState('');
-    // const [searchValue, setSearchValue] = useState('');
+
     const handleSearchChange = (event: ChangeEvent<HTMLInputElement>): void => {
         setSearchValue(event.target.value);
         setFilterSearch(filteredModel(event.target.value))
@@ -107,10 +45,27 @@ const SearchModel: FC<{}> = ({ }) => {
         );
     }
 
-    const onclickButton = (e) => {
-        console.log("get model name", e.target.value)
+    const dispatch = useDispatch();
+    const searchModel = (modelName) => {
+        console.log("modelsearch", modelName)
         setOpen(false);
+        homeService.searchModel(modelName).then(response => {
+            dispatch(setModelUser({ ...initialState, ...response }));
+        }).catch(err => {
+            dispatch(setModelUser({ ...initialState, model: "null" + err }));
+        });
+
     }
+    const onclickButton = event => {
+        if (event.key === 'Enter') {
+            searchModel(searchValue);
+        }
+    }
+    const onclickItem = (e) => {
+        setOpen(false);
+        searchModel(e.target.value);
+    }
+
     return (
         <>
             <Tooltip arrow title="Search">
@@ -126,14 +81,13 @@ const SearchModel: FC<{}> = ({ }) => {
                 fullWidth
                 scroll="paper"
                 onClose={handleClose}
-
             >
-
                 <DialogTitleWrapper>
                     <SearchInputWrapper
                         value={searchValue}
                         autoFocus={true}
                         onChange={handleSearchChange}
+                        onKeyPress={onclickButton}
                         InputProps={{
                             startAdornment: (
                                 <InputAdornment position="start">
@@ -152,14 +106,12 @@ const SearchModel: FC<{}> = ({ }) => {
                         filterSearch.map((modelName) => (
                             <List disablePadding key={modelName}>
                                 <ListItem >
-                                    <Button value={modelName} fullWidth style={{ justifyContent: "flex-start" }} variant="text" onClick={onclickButton}>
+                                    <Button value={modelName} fullWidth style={{ justifyContent: "flex-start" }} variant="text" onClick={onclickItem}>
                                         {modelName}
                                     </Button>
                                 </ListItem>
                                 <Divider component="li" />
                             </List>
-
-
                         ))
                     }
                 </DialogContent>

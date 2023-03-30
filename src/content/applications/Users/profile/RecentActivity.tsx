@@ -15,7 +15,7 @@ import HeaderSearch from 'src/layouts/SidebarLayout/Header/Buttons/Search';
 import ReactJson from 'react-json-view'
 import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
 import ModelTree from './ModelTree';
-import SearchModel from './SearchModel';
+import SearchModel from '../SearchModel';
 
 function RecentActivity() {
   const theme = useTheme();
