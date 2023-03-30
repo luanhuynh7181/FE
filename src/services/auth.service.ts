@@ -1,11 +1,17 @@
 import { UserDataLogin } from "src/data/UserDataSplice";
 import BaseService from "./base.service";
+import { UserDataKey, UserData } from '../UserData/UserData';
 
 
 class AuthService extends BaseService {
   async login(ticket): Promise<any> {
     return this.post("/auth/login?ticket=" + ticket);
   }
+
+  async logout() {
+    UserData.setObject(UserDataKey.USER_DATA_LOGIN, {});
+  }
+
 
   verifyCookie(): any {
     return this.get("/auth");

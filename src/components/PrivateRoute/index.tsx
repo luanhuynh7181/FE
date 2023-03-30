@@ -1,16 +1,19 @@
-import React, { useState } from 'react';
-import { selectUserData, UserDataLogin } from 'src/data/UserDataSplice';
-import { Navigate } from 'react-router';
-import Config from 'src/config/Config';
+import { UserDataLogin } from 'src/data/UserDataSplice';
 import { Utility } from '../../Utils/Utility';
-const PrivateRoute = ({ redirectPath = '/', children }) => {
-    if (Config.MODE == "DEV") {
-        return children;
-    }
-    const userData: UserDataLogin = Utility.getUserDataLogin();
-    if (userData.ticket == "") {
-        return <Navigate to={redirectPath} replace />;
-    }
+import { useNavigate } from 'react-router-dom';
+import { useMemo } from 'react';
+import { PATH_ROUTE } from 'src/route/routeConst';
+const PrivateRoute = ({ redirectPath = PATH_ROUTE.LOGIN.PATH, children }) => {
+    const navigate = useNavigate();
+    let user: UserDataLogin;
+    useMemo(() => {
+        user = Utility.getUserDataLogin();
+        let exitToken = user.token && user.token != "";
+        if (!exitToken) {
+            navigate(redirectPath);
+            return;
+        }
+    }, [])
     return children
 }
 

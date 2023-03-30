@@ -24,6 +24,10 @@ import LockOpenTwoToneIcon from '@mui/icons-material/LockOpenTwoTone';
 import AccountTreeTwoToneIcon from '@mui/icons-material/AccountTreeTwoTone';
 import { setUserDataLogin, UserDataLogin, initialState } from 'src/data/UserDataSplice';
 import { useDispatch } from 'react-redux';
+import { UserDataKey } from '../../../../UserData/UserData';
+import authService from 'src/services/auth.service';
+import Config from 'src/config/Config';
+import { PATH_ROUTE } from '../../../../route/routeConst';
 const UserBoxButton = styled(Button)(
   ({ theme }) => `
         padding-left: ${theme.spacing(1)};
@@ -78,10 +82,10 @@ function HeaderUserbox() {
   };
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const signOut = (): void => {
-    dispatch(setUserDataLogin(initialState))
-    localStorage.removeItem("user_data");
-    navigate("/");
+  const LogOut = (): void => {
+    authService.logout();
+    navigate(PATH_ROUTE.LOGIN.PATH);
+    return;
   }
 
   return (
@@ -143,9 +147,9 @@ function HeaderUserbox() {
         </List>
         <Divider />
         <Box sx={{ m: 1 }}>
-          <Button color="primary" fullWidth onClick={signOut}>
+          <Button color="primary" fullWidth onClick={LogOut}>
             <LockOpenTwoToneIcon sx={{ mr: 1 }} />
-            Sign out
+            LogOut
           </Button>
         </Box>
       </Popover>

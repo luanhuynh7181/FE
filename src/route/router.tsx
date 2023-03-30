@@ -21,7 +21,7 @@ const SignIn = Loader(lazy(() => import('src/content/SignIn')));
 
 // Dashboards
 
-const Home = Loader(lazy(() => import('src/content/dashboards/dashboard')));
+const Home = Loader(lazy(() => import('src/content/dashboards/home')));
 
 // Applications
 
@@ -84,12 +84,12 @@ const routes: RouteObject[] = [
   },
   {
     path: PATH_ROUTE.HOME.PATH,
-    element: <Home />
-  },
-  {
-    path: PATH_ROUTE.HOME.PATH,
-    element: <PrivateRoute><SidebarLayout /></PrivateRoute>,
+    element: <PrivateRoute><SidebarLayout /> </PrivateRoute>,
     children: [
+      {
+        path: "/",
+        element: <Home />
+      },
       {
         path: PATH_ROUTE.HOME.USER_PROFILE,
         element: <UserProfile />
