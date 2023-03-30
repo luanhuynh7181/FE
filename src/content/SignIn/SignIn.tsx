@@ -3,9 +3,10 @@ import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate, useLocation, useSearchParams } from 'react-router-dom';
 import Config from 'src/config/Config';
-import { setUser, UserData } from 'src/data/UserDataSplice';
+import { setUserDataLogin, UserDataLogin, initialState } from 'src/data/UserDataSplice';
 import { PATH_ROUTE } from 'src/route/routeConst';
 import authService from 'src/services/auth.service';
+import { UserData, UserDataKey } from 'src/UserData';
 import './styles.css';
 const styles = {
   heroContainer: {
@@ -13,12 +14,9 @@ const styles = {
   }
 };
 function SignIn() {
-  let location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
   const [searchParams, setSearchParams] = useSearchParams();
-
   const homePage = PATH_ROUTE.HOME.PATH;
   useEffect(() => {
     // if (Config.MODE == "DEV") {
@@ -28,12 +26,13 @@ function SignIn() {
     let ticket = searchParams.get('ticket');
     if (ticket) {
       authService.login(ticket).then(response => {
-        console.log('from SignIn', "oke", JSON.stringify(response));
-        // dispatch(setUser(user))
-        // localStorage.setItem("user_data", JSON.stringify(user));
+        let user: UserDataLogin = { ...initialState, ...response, ticket };
+        dispatch(setUserDataLogin(user))
+        UserData.setObject(UserDataKey.USER_DATA_LOGIN, user);
         navigate(homePage);
+        return;
       }).catch(err => {
-        console.log('login', "fail", "err", err);
+        console.log("login fail", err);
       });
     }
   }, [])

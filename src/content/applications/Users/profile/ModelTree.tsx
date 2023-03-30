@@ -12,7 +12,7 @@ import {
     Button
 } from '@mui/material';
 import ReactJson from 'react-json-view'
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { useState } from 'react';
 import ShoppingBagTwoToneIcon from '@mui/icons-material/ShoppingBagTwoTone';
 import FavoriteTwoToneIcon from '@mui/icons-material/FavoriteTwoTone';
@@ -22,14 +22,26 @@ import TreeItem from '@mui/lab/TreeItem';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ExpandMoreTwoToneIcon from '@mui/icons-material/ExpandMoreTwoTone';
-
+import { useSelector, useDispatch } from 'react-redux';
+import { setModelUser, selectUserData, UserModelDao } from 'src/data/UserModelDaoSplice';
 interface ModelTreeProps {
     model?: Object;
 }
-const ModelTree: FC<ModelTreeProps> = ({ model }) => {
-    // model["uid4"] = new Date();
-    // model["uid4"].setTime(1678665600)
+const ModelTree: FC<ModelTreeProps> = () => {
+    const userModelDao: UserModelDao = useSelector(selectUserData);
+    const dispatch = useDispatch();
+    useEffect(() => {
+        setTimeout(() => {
+            console.log("setModeluser");
+            let u: UserModelDao = {
+                model: {
+                    "test": 1
+                }
+            }
 
+            dispatch(setModelUser(u));
+        }, 3000);
+    }, [])
     const convertToDate = (value: number) => {
         let org = value;
         if (value < 120000000000) { //12B
@@ -76,11 +88,11 @@ const ModelTree: FC<ModelTreeProps> = ({ model }) => {
 
         })
     }
-    leafTraverseObject(model);
+    leafTraverseObject(userModelDao.model);
     return (
         <>
             <ReactJson
-                src={model} style={{ fontSize: 20, backgroundColor: 'white' }}
+                src={userModelDao.model} style={{ fontSize: 20, backgroundColor: 'white' }}
                 theme="summerfruit:inverted"
                 displayDataTypes={false}
                 enableClipboard={false}

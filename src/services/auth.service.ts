@@ -1,10 +1,9 @@
-import { UserData } from "src/data/UserDataSplice";
+import { UserDataLogin } from "src/data/UserDataSplice";
 import BaseService from "./base.service";
 
 
 class AuthService extends BaseService {
   async login(ticket): Promise<any> {
-    console.log("/auth/login" + ticket)
     return this.post("/auth/login?ticket=" + ticket);
   }
 

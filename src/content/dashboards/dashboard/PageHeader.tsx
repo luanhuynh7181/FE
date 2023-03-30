@@ -1,13 +1,11 @@
 import { Typography, Avatar, Grid } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
+import { UserDataLogin } from '../../../data/UserDataSplice';
+import { Utility } from '../../../Utils/Utility';
 
 function PageHeader() {
-  const user = {
-    name: 'Catherine Pike',
-    avatar: '/static/images/avatars/1.jpg'
-  };
   const theme = useTheme();
-
+  let user: UserDataLogin = Utility.getUserDataLogin();
   return (
     <Grid container alignItems="center">
       <Grid item>
@@ -19,15 +17,15 @@ function PageHeader() {
           }}
           variant="rounded"
           alt={user.name}
-          src={user.avatar}
+          src={"/static/images/avatars/1.jpg"}
         />
       </Grid>
       <Grid item>
         <Typography variant="h3" component="h3" gutterBottom>
-          Welcome, {user.name}!
+          {user.name}
         </Typography>
         <Typography variant="subtitle2">
-          Today is a good day to start trading crypto assets!
+          {user.email}
         </Typography>
       </Grid>
     </Grid>

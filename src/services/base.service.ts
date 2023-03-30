@@ -60,7 +60,7 @@ class BaseService {
     }
 
     post(path: any, payload?: any, headers?: any) {
-        // return this.client.post(path, payload, headers).then((response) => response.data);
+        return this.client.post(path, payload, headers).then((response) => response.data);
     }
 
     put(path, payload) {

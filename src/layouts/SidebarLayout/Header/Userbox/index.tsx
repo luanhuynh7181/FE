@@ -22,8 +22,8 @@ import ExpandMoreTwoToneIcon from '@mui/icons-material/ExpandMoreTwoTone';
 import AccountBoxTwoToneIcon from '@mui/icons-material/AccountBoxTwoTone';
 import LockOpenTwoToneIcon from '@mui/icons-material/LockOpenTwoTone';
 import AccountTreeTwoToneIcon from '@mui/icons-material/AccountTreeTwoTone';
-import { setUser, UserData, initialState } from 'src/data/UserDataSplice';
-import { useSelector, useDispatch } from 'react-redux';
+import { setUserDataLogin, UserDataLogin, initialState } from 'src/data/UserDataSplice';
+import { useDispatch } from 'react-redux';
 const UserBoxButton = styled(Button)(
   ({ theme }) => `
         padding-left: ${theme.spacing(1)};
@@ -79,7 +79,7 @@ function HeaderUserbox() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const signOut = (): void => {
-    dispatch(setUser(initialState))
+    dispatch(setUserDataLogin(initialState))
     localStorage.removeItem("user_data");
     navigate("/");
   }

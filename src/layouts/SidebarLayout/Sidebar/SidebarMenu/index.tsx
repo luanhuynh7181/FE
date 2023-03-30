@@ -191,7 +191,7 @@ function SidebarMenu() {
                   to={PATH_ROUTE.HOME.PATH}
                   startIcon={<DesignServicesTwoToneIcon />}
                 >
-                  Dashboard
+                  Home
                 </Button>
               </ListItem>
             </List>

@@ -1,31 +1,34 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import type { RootState } from '../app/store'
 
-// Define a type for the slice state
-export interface UserData {
+export interface UserDataLogin {
     ticket: string
+    id: string,
+    name: string
+    email: string
+    token: string
 }
-// Define the initial state using that type
-export const initialState: UserData = {
-    ticket: ""
+export const initialState: UserDataLogin = {
+    ticket: "",
+    id: "",
+    name: "",
+    email: "",
+    token: "",
 }
 
 export const UserDataSlice = createSlice({
     name: 'user_data',
-    // `createSlice` will infer the state type from the `initialState` argument
     initialState,
     reducers: {
-        // Use the PayloadAction type to declare the contents of `action.payload`
-        setUser: (state, action: PayloadAction<UserData>) => {
+        setUserDataLogin: (state, action: PayloadAction<UserDataLogin>) => {
             state = action.payload;
             return state;
         }
     }
 })
 
-export const { setUser } = UserDataSlice.actions
+export const { setUserDataLogin } = UserDataSlice.actions
 
-// Other code such as selectors can use the imported `RootState` type
-export const selectUserData = (state: RootState) => state.userData
+export const selectUserData = (state: RootState) => state.UserDataLogin
 
 export default UserDataSlice.reducer

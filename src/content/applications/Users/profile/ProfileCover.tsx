@@ -65,8 +65,7 @@ const ButtonUploadWrapper = styled(Box)(
 `
 );
 
-const CardCover = styled(Card)(
-  ({ theme }) => `
+const CardCover = styled(Card)(({ theme }) => `
     position: relative;
 
     .MuiCardMedia-root {
