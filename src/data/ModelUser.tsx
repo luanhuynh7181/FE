@@ -1,4 +1,4 @@
-export const modelSearch = [
+export const ModelUser = [
     "UProfileModel",
     "UserJourneyAbTestingModel",
     "UVoucherModel",

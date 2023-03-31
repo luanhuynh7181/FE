@@ -15,19 +15,16 @@ import {
   Popover,
   Typography
 } from '@mui/material';
-import { useNavigate, Navigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import InboxTwoToneIcon from '@mui/icons-material/InboxTwoTone';
 import { styled } from '@mui/material/styles';
 import ExpandMoreTwoToneIcon from '@mui/icons-material/ExpandMoreTwoTone';
 import AccountBoxTwoToneIcon from '@mui/icons-material/AccountBoxTwoTone';
 import LockOpenTwoToneIcon from '@mui/icons-material/LockOpenTwoTone';
 import AccountTreeTwoToneIcon from '@mui/icons-material/AccountTreeTwoTone';
-import { setUserDataLogin, UserDataLogin, initialState } from 'src/data/UserDataSplice';
 import { useDispatch } from 'react-redux';
-import { UserDataKey } from '../../../../UserData/UserData';
-import authService from 'src/services/auth.service';
-import Config from 'src/config/Config';
 import { PATH_ROUTE } from '../../../../route/routeConst';
+import authService from 'src/services/auth.service';
 const UserBoxButton = styled(Button)(
   ({ theme }) => `
         padding-left: ${theme.spacing(1)};

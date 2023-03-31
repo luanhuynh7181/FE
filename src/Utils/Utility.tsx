@@ -5,9 +5,9 @@
 
 import * as _ from "lodash";
 import { UserData, UserDataKey } from 'src/UserData';
-import { UserDataLogin } from '../data/UserDataSplice';
+import { UserAdminData } from '../data/ReduxSplice/UserAdminDataSplice';
 export const Utility = {
-    getUserDataLogin: function (): UserDataLogin {
+    getUserDataLogin: function (): UserAdminData {
         return UserData.getObject(UserDataKey.USER_DATA_LOGIN);
     }
 }

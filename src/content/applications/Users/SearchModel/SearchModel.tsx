@@ -11,11 +11,11 @@ import {
 } from '@mui/material';
 import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
 import { FC } from 'react';
-import { modelSearch } from 'src/data/modelsearch';
+import { ModelUser } from 'src/data/ModelUser';
 import homeService from 'src/services/home.service';
 import { useDispatch } from 'react-redux';
-import { setModelUser } from 'src/data/UserModelDaoSplice';
-import { initialState } from '../../../../data/UserModelDaoSplice';
+import { setModelUser } from 'src/data/ReduxSplice/UserModelDaoSplice';
+import { initialState } from '../../../../data/ReduxSplice/UserModelDaoSplice';
 import { Transition, DialogWrapper, SearchInputWrapper, DialogTitleWrapper } from './Styled';
 const SearchModel: FC<{}> = ({ }) => {
     const [filterSearch, setFilterSearch] = useState([]);
@@ -39,7 +39,7 @@ const SearchModel: FC<{}> = ({ }) => {
 
     const filteredModel = (searchValue: string) => {
         if (searchValue == '') return [];
-        return modelSearch.filter(
+        return ModelUser.filter(
             (model) =>
                 model.toLowerCase().indexOf(searchValue.toLowerCase()) > -1
         );
@@ -49,6 +49,7 @@ const SearchModel: FC<{}> = ({ }) => {
     const searchModel = (modelName) => {
         console.log("modelsearch", modelName)
         setOpen(false);
+        setFilterSearch([])
         homeService.searchModel(modelName).then(response => {
             dispatch(setModelUser({ ...initialState, ...response }));
         }).catch(err => {
@@ -56,7 +57,7 @@ const SearchModel: FC<{}> = ({ }) => {
         });
 
     }
-    const onclickButton = event => {
+    const onKeyPressed = event => {
         if (event.key === 'Enter') {
             searchModel(searchValue);
         }
@@ -68,26 +69,14 @@ const SearchModel: FC<{}> = ({ }) => {
 
     return (
         <>
-            <Tooltip arrow title="Search">
-                <IconButton color="primary" onClick={handleClickOpen}>
-                    <SearchTwoToneIcon />
-                </IconButton>
-            </Tooltip>
-            <DialogWrapper
-                open={open}
-                // TransitionComponent={Transition}
-                keepMounted
-                maxWidth="sm"
-                fullWidth
-                scroll="paper"
-                onClose={handleClose}
-            >
+            <div>
                 <DialogTitleWrapper>
+
                     <SearchInputWrapper
                         value={searchValue}
                         autoFocus={true}
                         onChange={handleSearchChange}
-                        onKeyPress={onclickButton}
+                        onKeyPress={onKeyPressed}
                         InputProps={{
                             startAdornment: (
                                 <InputAdornment position="start">
@@ -99,23 +88,24 @@ const SearchModel: FC<{}> = ({ }) => {
                         fullWidth
                         label="Search"
                     />
+
                 </DialogTitleWrapper>
-                <Divider />
-                <DialogContent>
-                    {
-                        filterSearch.map((modelName) => (
-                            <List disablePadding key={modelName}>
-                                <ListItem >
-                                    <Button value={modelName} fullWidth style={{ justifyContent: "flex-start" }} variant="text" onClick={onclickItem}>
-                                        {modelName}
-                                    </Button>
-                                </ListItem>
-                                <Divider component="li" />
-                            </List>
-                        ))
-                    }
-                </DialogContent>
-            </DialogWrapper>
+            </div>
+            <DialogContent style={filterSearch.length > 0 ? { backgroundColor: "#c9c3c3", borderRadius: 13 } : {}} >
+                {
+
+                    filterSearch.map((modelName, idx) => (
+                        <List disablePadding key={modelName}>
+                            <ListItem >
+                                <Button value={modelName} fullWidth style={{ justifyContent: "flex-start", color: "black" }} variant="text" onClick={onclickItem}>
+                                    {modelName + idx}
+                                </Button>
+                            </ListItem>
+                            {idx < filterSearch.length && <Divider component="li" />}
+                        </List>
+                    ))
+                }
+            </DialogContent>
         </>
     );
 }

@@ -1,14 +1,14 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import type { RootState } from '../app/store'
+import type { RootState } from '../../app/store'
 
-export interface UserDataLogin {
+export interface UserAdminData {
     ticket: string
     id: string,
     name: string
     email: string
     token: string
 }
-export const initialState: UserDataLogin = {
+export const initialState: UserAdminData = {
     ticket: "",
     id: "",
     name: "",
@@ -20,7 +20,7 @@ export const UserDataSlice = createSlice({
     name: 'user_data',
     initialState,
     reducers: {
-        setUserDataLogin: (state, action: PayloadAction<UserDataLogin>) => {
+        setUserDataLogin: (state, action: PayloadAction<UserAdminData>) => {
             state = action.payload;
             return state;
         }
@@ -29,6 +29,6 @@ export const UserDataSlice = createSlice({
 
 export const { setUserDataLogin } = UserDataSlice.actions
 
-export const selectUserData = (state: RootState) => state.UserDataLogin
+export const selectUserData = (state: RootState) => state.userAdminData
 
 export default UserDataSlice.reducer

@@ -23,7 +23,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ExpandMoreTwoToneIcon from '@mui/icons-material/ExpandMoreTwoTone';
 import { useSelector, useDispatch } from 'react-redux';
-import { setModelUser, selectUserData, UserModelDao } from 'src/data/UserModelDaoSplice';
+import { setModelUser, selectUserData, UserModelDao } from 'src/data/ReduxSplice/UserModelDaoSplice';
 import homeService from 'src/services/home.service';
 interface ModelTreeProps {
     model?: Object;
@@ -89,6 +89,7 @@ const ModelTree: FC<ModelTreeProps> = () => {
                 enableClipboard={false}
                 displayObjectSize={false}
                 indentWidth={4}
+                name={false}
             />
         </>
 

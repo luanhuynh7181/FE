@@ -5,6 +5,10 @@ class HomeService extends BaseService {
         return this.get("/auth/login?model=" + modelName);
     }
 
+    async searchUserById(modelName: string) {
+        return this.get("/auth/login?model=" + modelName);
+    }
+
 
     verifyCookie(): any {
         return this.get("/auth");

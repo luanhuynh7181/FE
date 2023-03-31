@@ -1,4 +1,3 @@
-import { UserDataLogin } from "src/data/UserDataSplice";
 import BaseService from "./base.service";
 import { UserDataKey, UserData } from '../UserData/UserData';
 

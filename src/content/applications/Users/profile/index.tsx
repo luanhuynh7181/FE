@@ -1,23 +1,9 @@
-import { Helmet } from 'react-helmet-async';
-import Footer from 'src/components/Footer';
 
-import { Grid, Container } from '@mui/material';
+import { Grid } from '@mui/material';
 
-import ProfileCover from './ProfileCover';
+import ProfileCover from './UserProfile/index.tsx/ProfileCover';
 import RecentActivity from './RecentActivity';
-import Feed from './Feed';
-import PopularTags from './PopularTags';
-import MyCards from './MyCards';
-import Addresses from './Addresses';
-import { makeStyles } from '@mui/styles';
-
 function ManagementUserProfile() {
-  const useStyles = makeStyles(theme => ({
-    color: {
-      backgroundColor: 'black'
-    }
-  }))
-
   const user = {
     savedCards: 1,
     name: 'Catherine Pik22e',
@@ -29,7 +15,6 @@ function ManagementUserProfile() {
     location: 'Barcelona, Spain',
     followers: '465'
   };
-
 
   return (
     <>

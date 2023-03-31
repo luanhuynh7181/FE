@@ -3,11 +3,12 @@ import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate, useLocation, useSearchParams } from 'react-router-dom';
 import Config from 'src/config/Config';
-import { setUserDataLogin, UserDataLogin, initialState } from 'src/data/UserDataSplice';
+import { setUserDataLogin, initialState } from 'src/data/ReduxSplice/UserAdminDataSplice';
 import { PATH_ROUTE } from 'src/route/routeConst';
 import authService from 'src/services/auth.service';
 import { UserData, UserDataKey } from 'src/UserData';
 import './styles.css';
+import { UserAdminData } from '../../data/ReduxSplice/UserAdminDataSplice';
 const styles = {
   heroContainer: {
     backgroundImage: `url(${"/static/images/background/bg-01.jpg"})`,
@@ -26,7 +27,7 @@ function SignIn() {
     let ticket = searchParams.get('ticket');
     if (ticket) {
       authService.login(ticket).then(response => {
-        let user: UserDataLogin = { ...initialState, ...response, ticket };
+        let user: UserAdminData = { ...initialState, ...response, ticket };
         dispatch(setUserDataLogin(user))
         UserData.setObject(UserDataKey.USER_DATA_LOGIN, user);
         navigate(homePage);

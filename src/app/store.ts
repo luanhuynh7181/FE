@@ -1,10 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit'
-import userDataReducer from "../data/UserDataSplice";
-import userModelDaoReducer from 'src/data/UserModelDaoSplice';
+import userDataReducer from "../data/ReduxSplice/UserAdminDataSplice";
+import userModelDaoReducer from 'src/data/ReduxSplice/UserModelDaoSplice';
+import userInfoReducer from 'src/data/ReduxSplice/UserInfoSplice';
 export const store = configureStore({
     reducer: {
-        UserDataLogin: userDataReducer,
-        userModelDao: userModelDaoReducer
+        userAdminData: userDataReducer,
+        userModelDao: userModelDaoReducer,
+        userInfo: userInfoReducer
     }
 })
 
