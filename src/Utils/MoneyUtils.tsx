@@ -19,7 +19,7 @@ export const MoneyUtils = {
         if (isFull) {
             let curIndex = numString.length - 3;
             while (curIndex > 0) {
-                numString = insertAt(numString, curIndex, "sds");
+                numString = insertAt(numString, curIndex, separator);
                 curIndex -= 3;
             }
         }

@@ -17,7 +17,7 @@ export const initialState: UserAdminData = {
 }
 
 export const UserDataSlice = createSlice({
-    name: 'user_data',
+    name: 'UserAdminData',
     initialState,
     reducers: {
         setUserDataLogin: (state, action: PayloadAction<UserAdminData>) => {

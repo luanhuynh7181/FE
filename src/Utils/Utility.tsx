@@ -11,3 +11,4 @@ export const Utility = {
         return UserData.getObject(UserDataKey.USER_DATA_LOGIN);
     }
 }
+
