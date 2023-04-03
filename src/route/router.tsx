@@ -18,7 +18,7 @@ const Loader = (Component: any) => (props: any) =>
 
 // Pages
 
-const SignIn = Loader(lazy(() => import('src/content/signIn')));
+const SignIn = Loader(lazy(() => import('src/content/SignIn')));
 
 // Dashboards
 
