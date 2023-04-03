@@ -9,6 +9,7 @@ import { UserAdminData } from '../data/ReduxSplice/UserAdminDataSplice';
 export const Utility = {
     getUserDataLogin: function (): UserAdminData {
         return UserData.getObject(UserDataKey.USER_DATA_LOGIN);
-    }
+    },
+
 }
 

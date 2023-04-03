@@ -33,12 +33,12 @@ const ProfileCover = ({ user }) => {
   const dispatch = useDispatch();
   const onKeyPressed = event => {
     if (event.key === 'Enter') {
+      console.log("searchUserById", uid)
       homeService.searchUserById(uid).then(response => {
         let data: UserInfo = { ...initialState, ...response };
         dispatch(setUserInfo(data));
         setUerInfo(data);
       }).catch(err => {
-        console.log("asdasd")
         alert("Not found")
       });
 
