@@ -8,6 +8,7 @@ import BaseLayout from 'src/layouts/BaseLayout';
 import SuspenseLoader from 'src/components/SuspenseLoader';
 import PrivateRoute from '../components/PrivateRoute';
 import { PATH_ROUTE } from './routeConst';
+import RequestMail from 'src/content/request/RequestMail';
 const Loader = (Component: any) => (props: any) =>
 (
   <Suspense fallback={<SuspenseLoader />}>
@@ -17,7 +18,7 @@ const Loader = (Component: any) => (props: any) =>
 
 // Pages
 
-const SignIn = Loader(lazy(() => import('src/content/SignIn')));
+const SignIn = Loader(lazy(() => import('src/content/signIn')));
 
 // Dashboards
 
@@ -93,11 +94,16 @@ const routes: RouteObject[] = [
       {
         path: PATH_ROUTE.HOME.USER_PROFILE,
         element: <UserProfile />
-      },
-      ,
+      }
+    ]
+  },
+  {
+    path: PATH_ROUTE.REQUEST.PATH,
+    element: <PrivateRoute><SidebarLayout /> </PrivateRoute>,
+    children: [
       {
-        path: 'messenger',
-        element: <Messenger />
+        path: PATH_ROUTE.REQUEST.MAIL,
+        element: <RequestMail />
       }
     ]
   },

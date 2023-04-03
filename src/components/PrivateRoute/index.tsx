@@ -6,14 +6,14 @@ import { PATH_ROUTE } from 'src/route/routeConst';
 const PrivateRoute = ({ redirectPath = PATH_ROUTE.LOGIN.PATH, children }) => {
     const navigate = useNavigate();
     let user: UserAdminData;
-    useMemo(() => {
-        user = Utility.getUserDataLogin();
-        let exitToken = user.token && user.token != "";
-        if (!exitToken) {
-            navigate(redirectPath);
-            return;
-        }
-    }, [])
+    // useMemo(() => {
+    //     user = Utility.getUserDataLogin();
+    //     let exitToken = user.token && user.token != "";
+    //     if (!exitToken) {
+    //         navigate(redirectPath);
+    //         return;
+    //     }
+    // }, [])
     return children
 }
 

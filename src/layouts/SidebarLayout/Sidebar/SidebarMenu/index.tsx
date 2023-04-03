@@ -29,22 +29,25 @@ function SidebarMenu() {
     <>
       <MenuWrapper>
         <SubMenuWrapper>
-          <List component="div">
-            {createItem(PATH_ROUTE.HOME.PATH, <DesignServicesTwoToneIcon />, "Home")}
-          </List>
+          <List component="div"> {createItem(PATH_ROUTE.HOME.PATH, <DesignServicesTwoToneIcon />, "Home")} </List>
         </SubMenuWrapper>
         <List
           component="div"
-          subheader={
-            <ListSubheader component="div" disableSticky>
-              Accounts
-            </ListSubheader>
-          }
-        >
+          subheader={<ListSubheader component="div" disableSticky>Accounts</ListSubheader>}  >
           <SubMenuWrapper>
             <List component="div">
               {createItem(PATH_ROUTE.HOME.PATH + PATH_ROUTE.HOME.USER_PROFILE, <AccountCircleTwoToneIcon />, "User Profile")}
               {createItem("/management/profile/settings", <DisplaySettingsTwoToneIcon />, "User Settings")}
+            </List>
+          </SubMenuWrapper>
+        </List>
+        <List
+          component="div"
+          subheader={<ListSubheader component="div" disableSticky>Request</ListSubheader>}  >
+          <SubMenuWrapper>
+            <List component="div">
+              {createItem(PATH_ROUTE.REQUEST.PATH + "/" + PATH_ROUTE.REQUEST.GIFT_CODE, <AccountCircleTwoToneIcon />, "Gift code")}
+              {createItem(PATH_ROUTE.REQUEST.PATH + "/" + PATH_ROUTE.REQUEST.MAIL, <DisplaySettingsTwoToneIcon />, "Mail")}
             </List>
           </SubMenuWrapper>
         </List>
