@@ -1,6 +1,7 @@
 /* eslint-disable */
 import axios, { AxiosInstance } from 'axios';
 // import store from '../store';
+import { Utility } from '../Utils/Utility';
 
 // Default API will be your root
 const API_ROOT = 'http://localhost:4000';
@@ -30,10 +31,11 @@ class BaseService {
 
         client.interceptors.response.use(this.handleSuccess, this.handleError);
         client.interceptors.request.use(function (config) {
-            let token = ""; //get from redux
+            let token = Utility.getUserDataLogin().token;
             if (token) {
-                config.headers.Authorization = `Bearer ${token}`;
+                config.headers.Authorization = 'Bearer ' + token;
             }
+
             return config;
         });
         this.client = client;

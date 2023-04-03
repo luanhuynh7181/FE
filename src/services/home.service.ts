@@ -2,11 +2,11 @@ import BaseService from "./base.service";
 
 class HomeService extends BaseService {
     async searchModel(modelName: string) {
-        return this.get("/auth/login?model=" + modelName);
+        return this.get("/players/" + modelName);
     }
 
     async searchUserById(modelName: string) {
-        return this.get("/auth/login?model=" + modelName);
+        return this.get("/players/" + modelName);
     }
 
 

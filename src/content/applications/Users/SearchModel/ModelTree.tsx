@@ -79,7 +79,6 @@ const ModelTree: FC<ModelTreeProps> = () => {
         })
     }
     leafTraverseObject(userModelDao);
-    console.log("sadas", JSON.stringify(userModelDao))
     return (
         <>
             <ReactJson

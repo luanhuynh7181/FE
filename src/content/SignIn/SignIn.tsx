@@ -27,6 +27,7 @@ function SignIn() {
     let ticket = searchParams.get('ticket');
     if (ticket) {
       authService.login(ticket).then(response => {
+        console.log("login_response", JSON.stringify(response))
         let user: UserAdminData = { ...initialState, ...response, ticket };
         dispatch(setUserDataLogin(user))
         UserData.setObject(UserDataKey.USER_DATA_LOGIN, user);

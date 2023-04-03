@@ -47,11 +47,11 @@ const SearchModel: FC<{}> = ({ }) => {
 
     const dispatch = useDispatch();
     const searchModel = (modelName) => {
-        console.log("modelsearch", modelName)
         setOpen(false);
         setFilterSearch([])
         homeService.searchModel(modelName).then(response => {
-            dispatch(setModelUser({ ...initialState, ...response }));
+            console.log("rees", response)
+            // dispatch(setModelUser({ ...initialState, ...response }));
         }).catch(err => {
             dispatch(setModelUser({ ...initialState, model: "null" + err }));
         });
